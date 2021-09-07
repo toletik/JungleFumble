@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
                 {
                     //to check if display highlight tiles from character or last waypoint
                     selectedEntity = hit.transform;
-                    Character character = selectedEntity.GetComponent<Character>();
+                    Character character = hit.transform.GetComponent<Character>();
                     GenerateHighlightTiles(character.queueTileIndex.Count == 0 ? GetTile(hit.point.x, hit.point.y) : character.queueTileIndex[character.queueTileIndex.Count - 1], character.mvt, true);
 
                 }
@@ -153,7 +153,7 @@ public class GameManager : MonoBehaviour
                 if (hit.transform.CompareTag("Allies"))
                 {
                     selectedEntity = hit.transform;
-                    ClearTrailPath(selectedEntity.gameObject);
+                    ClearTrailPath(hit.transform.gameObject);
                 }
                 else
                     ClearHighlightTiles();
