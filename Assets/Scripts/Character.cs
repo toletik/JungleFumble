@@ -20,7 +20,7 @@ public class Character : MonoBehaviour
     [SerializeField] public int precision = 0;
     [SerializeField] public int catchUp = 0;
 
-
+    public List<int> queueTileIndex = new List<int>();
 
     // Start is called before the first frame update
     void Start()

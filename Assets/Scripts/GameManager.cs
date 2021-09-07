@@ -12,6 +12,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject highlightTileParent = null;
     [SerializeField] GameObject gridParent = null;
 
+
+    Transform selectedEntity = null;
+    List<int> indexHighlightTiles = new List<int>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,21 +27,46 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag("Allies"))
+            
+            if (Physics.Raycast(ray, out hit))
             {
-                GenerateHighlightTiles(GetTile(hit.point.x, hit.point.y), hit.transform.GetComponent<Character>().mvt);
+                //select Allies
+                if (hit.transform.CompareTag("Allies"))
+                {                   
+                    GenerateHighlightTiles(GetTile(hit.point.x, hit.point.y), hit.transform.GetComponent<Character>().mvt, true);
+                    selectedEntity = hit.transform;
+                }
+                //select Enemies
+                else if (hit.transform.CompareTag("Enemies"))
+                {
+                    GenerateHighlightTiles(GetTile(hit.point.x, hit.point.y), hit.transform.GetComponent<Character>().mvt, false);
+                }
+                //select a Tile
+                else
+                {
+                    int tileIndex = GetTile(hit.point.x, hit.point.y);
 
-                Debug.Log("point" + hit.point);
+
+                    if (selectedEntity != null && indexHighlightTiles.Contains(tileIndex) )
+                    {
+                        Vector2 temp = GetPosFromTile(tileIndex);
+                        selectedEntity.position = new Vector3(temp.x, temp.y, selectedEntity.position.z);
+                    }
+
+                    ClearHighlightTiles();
+
+                }
+
             }
         }
 
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButtonDown(1))
         {
             ClearHighlightTiles();
         }
@@ -76,15 +105,15 @@ public class GameManager : MonoBehaviour
 
 
     }
-    void GenerateHighlightTiles(int CentralTile, int statMvt)
+    void GenerateHighlightTiles(int CentralTile, int statMvt, bool isAllies)
     {
         ClearHighlightTiles();
 
         float minX = -0.5f * (length - 1);
         float minY = -0.5f * (height - 1);
 
-        for (int h = 0; h < height - 1; h++)
-            for (int l = 0; l < length - 1; l++)
+        for (int h = 0; h < height; h++)
+            for (int l = 0; l < length; l++)
             {
                 int tileIndex = l + h * length;
 
@@ -96,10 +125,11 @@ public class GameManager : MonoBehaviour
 
                 if (offsetX + offsetY <= statMvt)
                 {
+                    indexHighlightTiles.Add(tileIndex);
                     GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
                     quad.transform.SetParent(highlightTileParent.transform);
                     quad.transform.localPosition = new Vector3(minX + l, minY + h, 0);
-                    quad.GetComponent<Renderer>().material.color = Color.blue;
+                    quad.GetComponent<Renderer>().material.color = isAllies ? Color.blue : Color.red;
                 }
             }
     }
@@ -108,9 +138,19 @@ public class GameManager : MonoBehaviour
         //clear previous Highlight
         foreach (Transform child in highlightTileParent.transform)
             Destroy(child.gameObject);
+
+        indexHighlightTiles.Clear();
+        selectedEntity = null;
     }
 
-    int GetTile(float x, float y) { return Mathf.RoundToInt(x + 0.5f * (length - 1)) + Mathf.RoundToInt(y + 0.5f * (height - 1)) * length; }
-
+    int GetTile(float x, float y)
+    { 
+        return Mathf.RoundToInt(x + 0.5f * (length - 1)) + Mathf.RoundToInt(y + 0.5f * (height - 1)) * length; 
+    }
+    Vector2 GetPosFromTile(int tileIndex)
+    {
+        return new Vector2(-0.5f * (length - 1) + tileIndex % length, 
+                           -0.5f * (height - 1) + (int)(tileIndex / length));
+    }
 
 }
