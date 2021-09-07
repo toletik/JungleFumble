@@ -2,18 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapHandler : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     [SerializeField] int length = 20;
     [SerializeField] int height = 14;
     [SerializeField] Camera cam = null;
-    [SerializeField] GameObject gridParent = null;
+
+    [SerializeField] GameObject map = null;
     [SerializeField] GameObject highlightTileParent = null;
+    [SerializeField] GameObject gridParent = null;
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.localScale = new Vector3(length, height, 1);
+        map.transform.localScale = new Vector3(length, height, 1);
         GenerateGrid();
 
     }
@@ -29,8 +31,17 @@ public class MapHandler : MonoBehaviour
             if (Physics.Raycast(ray, out hit) && hit.transform.CompareTag("Allies"))
             {
                 GenerateHighlightTiles(GetTile(hit.point.x, hit.point.y), hit.transform.GetComponent<Character>().mvt);
+
+                Debug.Log("point" + hit.point);
             }
         }
+
+
+        if (Input.GetMouseButton(1))
+        {
+            ClearHighlightTiles();
+        }
+
 
     }
 
@@ -48,7 +59,7 @@ public class MapHandler : MonoBehaviour
             GameObject line = GameObject.CreatePrimitive(PrimitiveType.Quad);
             line.transform.SetParent(gridParent.transform);
             line.transform.localScale = new Vector3(0.1f, height, 0.1f);
-            line.transform.position = new Vector3(minX + l, 0, -0.51f);
+            line.transform.localPosition = new Vector3(minX + l, 0, 0);
             line.GetComponent<Renderer>().material.color = Color.black;
         }
 
@@ -59,7 +70,7 @@ public class MapHandler : MonoBehaviour
             GameObject line = GameObject.CreatePrimitive(PrimitiveType.Quad);
             line.transform.SetParent(gridParent.transform);
             line.transform.localScale = new Vector3(length, 0.1f, 0.1f);
-            line.transform.position = new Vector3(0, minY + h, -0.51f);
+            line.transform.localPosition = new Vector3(0, minY + h, 0);
             line.GetComponent<Renderer>().material.color = Color.black;
         }
 
@@ -83,11 +94,11 @@ public class MapHandler : MonoBehaviour
                 int offsetX = Mathf.Abs(CentralTile % length - tileIndex % length);
                 int offsetY = Mathf.Abs((int)(CentralTile / length) - (int)(tileIndex / length));
 
-                if(offsetX + offsetY <= statMvt)
+                if (offsetX + offsetY <= statMvt)
                 {
                     GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
                     quad.transform.SetParent(highlightTileParent.transform);
-                    quad.transform.position = new Vector3(minX + l, minY + h, -0.53f);
+                    quad.transform.localPosition = new Vector3(minX + l, minY + h, 0);
                     quad.GetComponent<Renderer>().material.color = Color.blue;
                 }
             }
@@ -99,7 +110,7 @@ public class MapHandler : MonoBehaviour
             Destroy(child.gameObject);
     }
 
-    int GetTile(float x, float y) {return Mathf.RoundToInt(x) + length / 2 + (Mathf.RoundToInt(y) + height / 2) * length; }
+    int GetTile(float x, float y) { return Mathf.RoundToInt(x + 0.5f * (length - 1)) + Mathf.RoundToInt(y + 0.5f * (height - 1)) * length; }
 
 
 }
