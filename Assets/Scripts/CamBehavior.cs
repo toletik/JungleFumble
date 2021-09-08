@@ -1,49 +1,69 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-
-public enum CameraKind
-{
-    E_TACTICCAM = 0,
-    E_PLAYCAM = 1,
-
-}
 
 public class CamBehavior : MonoBehaviour
 {
+    [SerializeField] GameObject tacticCam;
+    [SerializeField] GameObject playCam;
+	[SerializeField] Image fade;
+	[SerializeField] float transitionSpeed = 2.0f;
 
-    [SerializeField] Transform[] views;
-    [SerializeField] float transitionTime;
+	private bool goingToPlay = true;
 
-  
+	//private bool playcam = false;
 
-    Transform currentView = null;
-    int camNumber = 0;
+	private void Start()
+	{
+		fade.canvasRenderer.SetAlpha(0.0f);
+		
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        currentView = views[0];
-    }
-
+	}
 
 	private void Update()
 	{
-        if (Input.GetKeyDown(KeyCode.A))
-            currentView = views[0];
-        if (Input.GetKeyDown(KeyCode.Z))
-            currentView = views[1];
-    }
+		if (Input.GetKeyDown(KeyCode.Space))
+			Fade();
+	}
 
-	public void switchView(CameraKind cameraKind)
+
+
+	void FadeIn()
 	{
-        currentView = views[(int)cameraKind];
-        
-    }
+		fade.CrossFadeAlpha(0, transitionSpeed, false);
+	}
 
-	void LateUpdate()
-    {
-        transform.position = Vector3.Lerp(transform.position, currentView.position, transitionTime * Time.deltaTime);
-    }
+	void FadeOut()
+	{
+		fade.CrossFadeAlpha(1, transitionSpeed, false);
+		
+	}
+
+	public void Fade()
+	{
+		FadeOut();
+		Invoke("SwitchCamera", transitionSpeed);
+		Invoke("FadeIn", transitionSpeed);
+		
+	}
+
+	void SwitchCamera()
+	{
+		if (goingToPlay)
+		{
+			tacticCam.SetActive(false);
+			playCam.SetActive(true);
+			goingToPlay = false;
+		}
+		else
+		{
+
+			playCam.SetActive(false);
+			tacticCam.SetActive(true);
+			goingToPlay = true;
+		}
+	}
+
 }
