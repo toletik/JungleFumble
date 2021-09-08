@@ -6,9 +6,11 @@ using UnityEngine.SceneManagement;
 public class ButtonHandler : MonoBehaviour
 {
     // Start is called before the first frame update
+
+    private int activeScene = 0;
     void Start()
     {
-        
+        activeScene = SceneManager.GetActiveScene().buildIndex;
     }
 
     // Update is called once per frame
@@ -19,7 +21,7 @@ public class ButtonHandler : MonoBehaviour
 
     public void Play()
 	{
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(activeScene + 1);
 
     }
 
@@ -27,4 +29,14 @@ public class ButtonHandler : MonoBehaviour
 	{
         Application.Quit();
     }
+
+    public void MainMenu()
+	{
+        SceneManager.LoadScene(0);
+    }
+
+    public void Retry()
+	{
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	}
 }

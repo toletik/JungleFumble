@@ -12,7 +12,7 @@ public class CamBehavior : MonoBehaviour
 	[SerializeField] float transitionSpeed = 2.0f;
 
 	private bool goingToPlay = true;
-
+	private bool canSwitch = true;
 	//private bool playcam = false;
 
 	private void Start()
@@ -33,6 +33,7 @@ public class CamBehavior : MonoBehaviour
 	void FadeIn()
 	{
 		fade.CrossFadeAlpha(0, transitionSpeed, false);
+		canSwitch = true;
 	}
 
 	void FadeOut()
@@ -43,9 +44,14 @@ public class CamBehavior : MonoBehaviour
 
 	public void Fade()
 	{
-		FadeOut();
-		Invoke("SwitchCamera", transitionSpeed);
-		Invoke("FadeIn", transitionSpeed);
+		if (canSwitch)
+		{
+			canSwitch = false;
+			FadeOut();
+			Invoke("SwitchCamera", transitionSpeed);
+			Invoke("FadeIn", transitionSpeed);
+		}
+		
 		
 	}
 
