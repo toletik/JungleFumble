@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
-{
+{    
     [SerializeField] int   length = 20;
     [SerializeField] int   height = 14;
     [SerializeField] float speed = 10;
+    [SerializeField] int   touchDownLength = 0;
 
     [SerializeField] Camera cam = null;
     [SerializeField] GameObject map = null;
@@ -30,8 +31,6 @@ public class GameManager : MonoBehaviour
     Vector3 ballDestination = Vector3.zero;
 
 
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +38,6 @@ public class GameManager : MonoBehaviour
         ballDestination = ball.transform.position;
         map.transform.localScale = new Vector3(length, height, 1);
         GenerateGrid();
-
     }
 
     // Update is called once per frame
@@ -49,13 +47,42 @@ public class GameManager : MonoBehaviour
             PlayMode();
         else
             TacticalMode();
-
     }
 
 
     void PlayMode()
     {
-        //Move Characters
+        MoveCharacters();
+        MoveBall();
+
+        if (!isThereStillWaypoints() && (!ball.activeSelf || ballDestination == ball.transform.position))
+            QuitPlayMode();
+    }
+    void TacticalMode()
+    {
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ClearHighlightTiles();
+            inPlayMode = true;
+        }
+
+
+        if (Input.GetMouseButtonDown(0))
+            OnLeftClick();
+        if (Input.GetMouseButtonDown(1))
+            OnRightClick();
+        if (Input.GetMouseButtonDown(2))
+            OnMiddleClick();
+
+    }
+
+
+
+
+    //Playmode
+    void MoveCharacters()
+    {
         foreach (GameObject character in characters)
         {
             Character characterScript = character.GetComponent<Character>();
@@ -85,9 +112,10 @@ public class GameManager : MonoBehaviour
 
             }
         }
-
-        //Move Ball
-        if(ball.activeSelf && ballDestination != ball.transform.position)
+    }
+    void MoveBall()
+    {
+        if (ball.activeSelf && ballDestination != ball.transform.position)
         {
             Vector3 direction = ballDestination - ball.transform.position;
             ball.transform.position += direction.normalized * (speed * Time.deltaTime);
@@ -98,128 +126,7 @@ public class GameManager : MonoBehaviour
             else
                 ball.GetComponent<LineRenderer>().SetPosition(0, ball.transform.position);
         }
-
-        if (!isThereStillWaypoints() && (!ball.activeSelf || ballDestination == ball.transform.position))
-            QuitPlayMode();
     }
-    void TacticalMode()
-    {
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ClearHighlightTiles();
-            inPlayMode = true;
-        }
-
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            RaycastHit hit;
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
-
-            if (Physics.Raycast(ray, out hit))
-            {
-
-
-                //select Allies
-                if (hit.transform.CompareTag("Allies"))
-                {
-                    Character characterScript = hit.transform.GetComponent<Character>();
-
-                    //if not throwing already
-                    if(characterScript.canPickUpBall)
-                    {
-                        //to check if display highlight tiles from character or last waypoint
-                        selectedEntity = hit.transform;
-                        selectedEntityTryToMove = true;
-                        GenerateHighlightTiles(characterScript.queueTileIndex.Count == 0 ? GetTile(hit.point.x, hit.point.y) : characterScript.queueTileIndex[characterScript.queueTileIndex.Count - 1], characterScript.mvt - characterScript.queueTileIndex.Count, Color.blue);
-                    }
-                }
-                //select Enemies
-                else if (hit.transform.CompareTag("Enemies"))
-                {
-                    GenerateHighlightTiles(GetTile(hit.point.x, hit.point.y), hit.transform.GetComponent<Character>().mvt, Color.red);
-                    selectedEntity = null;
-                }
-                //select a Tile
-                else
-                {
-                    int tileIndex = GetTile(hit.point.x, hit.point.y);
-
-                    if (selectedEntity != null && indexHighlightTiles.Contains(tileIndex))
-                    {
-                        if (selectedEntityTryToMove)
-                            TileSelectMove(tileIndex);
-                        else
-                            TileSelectThrow(tileIndex);
-                    }
-                    else
-                    {
-                        ClearHighlightTiles();
-                        selectedEntity = null;
-                    }
-
-                }
-
-            }
-        }
-
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            RaycastHit hit;
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.transform.CompareTag("Allies"))
-                {
-                    Character characterScript = hit.transform.GetComponent<Character>();
-
-                    //cancel the throw
-                    if (!characterScript.canPickUpBall)
-                        CancelThrow(characterScript);
-                    //cancel Mvt
-                    else
-                        ClearTrailPath(hit.transform.gameObject);
-                }
-            }
-
-            ClearHighlightTiles();
-        }
-
-
-        if (Input.GetMouseButtonDown(2))
-        {
-            RaycastHit hit;
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.transform.CompareTag("Allies"))
-                {
-                    Character characterScript = hit.transform.GetComponent<Character>();
-
-                    //can Throw only if have ball AND dont already move
-                    if (characterScript.hasBall && characterScript.queueTileIndex.Count == 0)
-                    {
-                        selectedEntity = hit.transform;
-                        selectedEntityTryToMove = false;
-                        GenerateHighlightTiles(GetTile(hit.transform.position.x, hit.transform.position.y), hit.transform.GetComponent<Character>().range, Color.yellow);
-                    }
-                }
-            }
-        }
-
-    }
-
-
-
-
-    //Playmode
     bool isThereStillWaypoints()
     {
         foreach (GameObject character in characters)
@@ -235,7 +142,102 @@ public class GameManager : MonoBehaviour
         foreach (GameObject character in characters)
             character.GetComponent<Character>().canPickUpBall = true;
     }
+    //TacticalMode
+    void OnLeftClick()
+    {
+        RaycastHit hit;
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            //select Allies
+            if (hit.transform.CompareTag("Allies"))
+            {
+                Character characterScript = hit.transform.GetComponent<Character>();
+
+                //if not throwing already
+                if (characterScript.canPickUpBall)
+                {
+                    //to check if display highlight tiles from character or last waypoint
+                    selectedEntity = hit.transform;
+                    selectedEntityTryToMove = true;
+                    GenerateHighlightTiles(characterScript.queueTileIndex.Count == 0 ? GetTile(hit.point.x, hit.point.y) : characterScript.queueTileIndex[characterScript.queueTileIndex.Count - 1], characterScript.mvt - characterScript.queueTileIndex.Count, Color.blue);
+                }
+            }
+            //select Enemies
+            else if (hit.transform.CompareTag("Enemies"))
+            {
+                GenerateHighlightTiles(GetTile(hit.point.x, hit.point.y), hit.transform.GetComponent<Character>().mvt, Color.red);
+                selectedEntity = null;
+            }
+            //select a Tile
+            else
+            {
+                int tileIndex = GetTile(hit.point.x, hit.point.y);
+
+                if (selectedEntity != null && indexHighlightTiles.Contains(tileIndex))
+                {
+                    if (selectedEntityTryToMove)
+                        TileSelectMove(tileIndex);
+                    else
+                        TileSelectThrow(tileIndex);
+                }
+                else
+                {
+                    ClearHighlightTiles();
+                    selectedEntity = null;
+                }
+
+            }
+
+        }
+    }
+    void OnRightClick()
+    {
+        RaycastHit hit;
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform.CompareTag("Allies"))
+            {
+                Character characterScript = hit.transform.GetComponent<Character>();
+
+                //cancel the throw
+                if (!characterScript.canPickUpBall)
+                    CancelThrow(characterScript);
+                //cancel Mvt
+                else
+                    ClearTrailPath(hit.transform.gameObject);
+            }
+        }
+
+        ClearHighlightTiles();
+    }
+    void OnMiddleClick()
+    {
+        RaycastHit hit;
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform.CompareTag("Allies"))
+            {
+                Character characterScript = hit.transform.GetComponent<Character>();
+
+                //can Throw only if have ball AND dont already move
+                if (characterScript.hasBall && characterScript.queueTileIndex.Count == 0)
+                {
+                    selectedEntity = hit.transform;
+                    selectedEntityTryToMove = false;
+                    GenerateHighlightTiles(GetTile(hit.transform.position.x, hit.transform.position.y), hit.transform.GetComponent<Character>().range, Color.yellow);
+                }
+            }
+        }
+    }
     //Grid
     void GenerateGrid()
     {
@@ -317,6 +319,7 @@ public class GameManager : MonoBehaviour
     void TileSelectMove(int tileIndex)
     {
         Character characterScript = selectedEntity.GetComponent<Character>();
+        //check if move from Character or last Waypoint
         int referenceTile = characterScript.queueTileIndex.Count == 0 ? GetTile(selectedEntity.position.x, selectedEntity.position.y) : characterScript.queueTileIndex[characterScript.queueTileIndex.Count - 1];
 
         int offsetX = GetOffsetXBetweenTiles(referenceTile, tileIndex);
@@ -401,8 +404,8 @@ public class GameManager : MonoBehaviour
         Character characterScript = character.GetComponent<Character>();
         float tileXValue = characterScript.queueTileIndex[0] % length;
 
-        if ((tileXValue == 0 && character.CompareTag("Enemies")) ||
-            (tileXValue == length - 1 && character.CompareTag("Allies")) )
+        if ((tileXValue < touchDownLength && character.CompareTag("Enemies")) ||
+            (tileXValue >= length - touchDownLength && character.CompareTag("Allies")) )
             return true;
 
         return false;
