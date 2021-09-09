@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
 
     void PlayMode()
     {
-        CheckCharactersColision();
+        ResolveCharacterColision();
         MoveCharacters();
         MoveBall();
         
@@ -225,9 +225,8 @@ public class GameManager : MonoBehaviour
 
 
     }
-    void CheckCharactersColision()
+    void ResolveCharacterColision()
     {
-
         List<int> tempAllTilesIndex = new List<int>();
 
         //Check if two character want to access same tile or a character want to move to a tile of a static character
@@ -392,6 +391,9 @@ public class GameManager : MonoBehaviour
             {
                 Character characterScript = hit.transform.GetComponent<Character>();
 
+                //characterScript.characterCard.SetActive(true);
+                //characterScript.characterCard.GetComponent<Renderer>().material.SetTexture("", characterScript.characterCardTexture);
+
                 //if not throwing already
                 if (characterScript.canPickUpBall)
                 {
@@ -414,7 +416,7 @@ public class GameManager : MonoBehaviour
 
                 if (selectedEntity != null && indexHighlightTiles.Contains(tileIndex))
                 {
-                    
+                    RuntimeManager.PlayOneShot(comfirmMovementSound);
 
                     if (selectedEntityTryToMove)
                         TileSelectMove(selectedEntity, tileIndex);
