@@ -213,11 +213,14 @@ MonoBehaviour:
   range: 6
   charactePlaymode: {fileID: 0}
   ballIcon: {fileID: 3537322847744935316}
-  characterCard: {fileID: 5045326000588998462}
   hasBall: 0
   canPickUpBall: 1
+  characterCard: {fileID: 5045326000588998462}
+  timeToShowCard: 1
   initialPos: {x: 0, y: 0, z: 0}
   queueTileIndex: 
+  blocSound: event:/Actions/Blocage/panther_bloc
+  catchSound: "event:/Actions/R\xE9ception/panther_catch"
 --- !u!1001 &6461540192473426570
 PrefabInstance:
   m_ObjectHideFlags: 0

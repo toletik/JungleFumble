@@ -213,11 +213,14 @@ MonoBehaviour:
   range: 2
   charactePlaymode: {fileID: 0}
   ballIcon: {fileID: 5627052658221852351}
-  characterCard: {fileID: 4826406356666409228}
   hasBall: 0
   canPickUpBall: 1
+  characterCard: {fileID: 4826406356666409228}
+  timeToShowCard: 1
   initialPos: {x: 0, y: 0, z: 0}
   queueTileIndex: 
+  blocSound: event:/Actions/Blocage/gazelle_bloc
+  catchSound: "event:/Actions/R\xE9ception/gazelle_catch"
 --- !u!1001 &2786697262171376033
 PrefabInstance:
   m_ObjectHideFlags: 0

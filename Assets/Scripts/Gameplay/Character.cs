@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 /*
 struct Stats
@@ -30,6 +31,9 @@ public class Character : MonoBehaviour
     public Vector3 initialPos;
     public List<int> queueTileIndex = new List<int>();
 
+    [SerializeField] public string blocSound = "";
+    [SerializeField] public string catchSound = "";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -51,6 +55,7 @@ public class Character : MonoBehaviour
             ballIcon.SetActive(true);
             other.GetComponent<LineRenderer>().positionCount = 0;
             other.gameObject.SetActive(false);
+            RuntimeManager.PlayOneShot(catchSound);
         }
     }
 

@@ -213,11 +213,14 @@ MonoBehaviour:
   range: 3
   charactePlaymode: {fileID: 0}
   ballIcon: {fileID: 1529955701136796660}
-  characterCard: {fileID: 2162506170431420632}
   hasBall: 0
   canPickUpBall: 1
+  characterCard: {fileID: 2162506170431420632}
+  timeToShowCard: 1
   initialPos: {x: 0, y: 0, z: 0}
   queueTileIndex: 
+  blocSound: event:/Actions/Blocage/rhino_bloc
+  catchSound: "event:/Actions/R\xE9ception/rhino_catch"
 --- !u!1001 &4396653135587548029
 PrefabInstance:
   m_ObjectHideFlags: 0
