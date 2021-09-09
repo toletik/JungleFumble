@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 6356548117508039372}
   - component: {fileID: 8290804372129808284}
   m_Layer: 0
-  m_Name: Character1
+  m_Name: Serpent Cap
   m_TagString: Allies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -159,7 +159,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1d048e07aa4bd2f4eb291cd30e28bade, type: 2}
+  - {fileID: 2100000, guid: 4c318042b7f42dc429a490c2511a7525, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
