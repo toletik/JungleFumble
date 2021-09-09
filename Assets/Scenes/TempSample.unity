@@ -2037,10 +2037,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 960790256}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1805748425}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: PauseMenu
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4250,11 +4250,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8290804372129808224, guid: 10f66957b0f9eb642bac189f8b2d5384, type: 3}
   m_PrefabInstance: {fileID: 808820883}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &808820885 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8290804372129808283, guid: 10f66957b0f9eb642bac189f8b2d5384, type: 3}
-  m_PrefabInstance: {fileID: 808820883}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &817878193
 GameObject:
   m_ObjectHideFlags: 0
@@ -6168,11 +6163,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8290804372129808224, guid: 10f66957b0f9eb642bac189f8b2d5384, type: 3}
   m_PrefabInstance: {fileID: 1188449140}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1188449142 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8290804372129808283, guid: 10f66957b0f9eb642bac189f8b2d5384, type: 3}
-  m_PrefabInstance: {fileID: 1188449140}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1190747060
 GameObject:
   m_ObjectHideFlags: 0
@@ -7151,11 +7141,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8290804372129808224, guid: 10f66957b0f9eb642bac189f8b2d5384, type: 3}
   m_PrefabInstance: {fileID: 1488159327}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1488159329 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8290804372129808283, guid: 10f66957b0f9eb642bac189f8b2d5384, type: 3}
-  m_PrefabInstance: {fileID: 1488159327}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1516107366
 GameObject:
   m_ObjectHideFlags: 0
@@ -7832,11 +7817,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8290804372129808224, guid: 10f66957b0f9eb642bac189f8b2d5384, type: 3}
   m_PrefabInstance: {fileID: 1590791006}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1590791008 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8290804372129808283, guid: 10f66957b0f9eb642bac189f8b2d5384, type: 3}
-  m_PrefabInstance: {fileID: 1590791006}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1592611530
 GameObject:
   m_ObjectHideFlags: 0
@@ -8389,7 +8369,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1667952174
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8679,12 +8659,10 @@ MonoBehaviour:
   map: {fileID: 730250558}
   highlightTileParent: {fileID: 668191820}
   gridParent: {fileID: 1471056251}
-  characters:
-  - {fileID: 1590791008}
-  - {fileID: 1188449142}
-  - {fileID: 1488159329}
-  - {fileID: 808820885}
+  allies: []
+  enemies: []
   ball: {fileID: 588677792}
+  pauseMenu: {fileID: 960790256}
 --- !u!4 &1805748426
 Transform:
   m_ObjectHideFlags: 0
