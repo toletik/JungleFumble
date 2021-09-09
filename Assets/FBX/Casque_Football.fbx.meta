@@ -3,7 +3,12 @@ guid: ec6cf303bfd0d5144b3c2229edae29cd
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MAT_Casque_tonneau
+    second: {fileID: 2100000, guid: d4e19b2ffe2b6624e81235b3ba545dfc, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
