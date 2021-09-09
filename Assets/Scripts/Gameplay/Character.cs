@@ -17,12 +17,15 @@ public class Character : MonoBehaviour
     [SerializeField] public int mvt;
     [SerializeField] public int strength = 0;
     [SerializeField] public int range = 0;
-    [SerializeField] public int precision = 0;
-    [SerializeField] public int catchUp = 0;
 
+
+    [SerializeField] public Transform charactePlaymode = null;
     [SerializeField] public GameObject ballIcon = null;
     public bool hasBall = false;
     public bool canPickUpBall = true;
+    [SerializeField] GameObject characterCard = null;
+    [SerializeField] float timeToShowCard = 1;
+    float currentTimeToShowCard = 0;
 
     public Vector3 initialPos;
     public List<int> queueTileIndex = new List<int>();
@@ -51,4 +54,18 @@ public class Character : MonoBehaviour
         }
     }
 
+
+    private void OnMouseOver()
+    {
+        currentTimeToShowCard += Time.deltaTime;
+
+        if(currentTimeToShowCard >= timeToShowCard)
+            characterCard.SetActive(true);
+    }
+
+    private void OnMouseExit()
+    {
+        currentTimeToShowCard = 0;
+        characterCard.SetActive(false);
+    }
 }

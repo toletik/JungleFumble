@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
-{    
-    [SerializeField] int   length = 20;
-    [SerializeField] int   height = 14;
+{
+    [SerializeField] int length = 20;
+    [SerializeField] int height = 14;
     [SerializeField] float speed = 10;
-    [SerializeField] int   touchDownLength = 0;
-    [SerializeField] int   nbOfPointsToWin = 0;
+    [SerializeField] int touchDownLength = 0;
+    [SerializeField] int nbOfPointsToWin = 0;
     [SerializeField] GameObject winScreen = null;
     [SerializeField] GameObject loseScreen = null;
 
 
-
-
+    [SerializeField] Transform initialOffset = null;
     [SerializeField] Camera cam = null;
     [SerializeField] GameObject map = null;
     [SerializeField] GameObject highlightTileParent = null;
@@ -36,9 +35,13 @@ public class GameManager : MonoBehaviour
 
 
     [SerializeField] GameObject ball = null;
+    [SerializeField] Transform ballPlaymode = null;
     Vector3 ballinitialPos = Vector3.zero;
     Vector3 ballDestination = Vector3.zero;
 
+
+    [SerializeField] GameObject pauseMenu = null;
+    private bool isInPause = false;
 
     // Start is called before the first frame update
     void Start()
@@ -60,11 +63,19 @@ public class GameManager : MonoBehaviour
             PlayMode();
         else
             TacticalMode();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            PauseMenu();
+
+
+
+
     }
 
 
     void PlayMode()
     {
+        CheckCharactersColision();
         MoveCharacters();
         MoveBall();
 
@@ -104,7 +115,7 @@ public class GameManager : MonoBehaviour
         GameObject toReturn = null;
         int offsetMax = int.MaxValue;
 
-        foreach(GameObject character in characters)
+        foreach (GameObject character in characters)
         {
             int possibleNewOffset = GetOffsetAllBetweenTiles(GetTile(character.transform.position.x, character.transform.position.y), tileIndex);
 
@@ -198,50 +209,97 @@ public class GameManager : MonoBehaviour
 
 
     }
-    void MoveCharacters()
+
+    void CheckCharactersColision()
     {
+
         List<int> tempAllTilesIndex = new List<int>();
 
-        //Check if two character want to access same tile
+        //Check if two character want to access same tile or a character want to move to a tile of a static character
         foreach (GameObject character in allCharacters)
-        { 
-            Character characterScript = character.GetComponent<Character>();
-            int tileIndex = 0;
+        {
+            Character currentCharacterScript = character.GetComponent<Character>();
+            int currentCharacterTile = 0;
+            bool currentCharacterIsStatic = false;
 
-            //if character static
-            if (characterScript.queueTileIndex.Count == 0)
-                tileIndex = GetTile(character.transform.position.x, character.transform.position.y);
-            //get next waypoint
-            else
-                tileIndex = characterScript.queueTileIndex[0];
-
-
-            if (tempAllTilesIndex.Contains(tileIndex))
+            //get reference tile
+            if (currentCharacterScript.queueTileIndex.Count == 0)
             {
-                //Remove all remaining Mvt
-                allCharacters[tempAllTilesIndex.IndexOf(tileIndex)].GetComponent<Character>().queueTileIndex.Clear();
-                characterScript.queueTileIndex.Clear();
-
-                //if someone has ball and the other is stronger, he get the ball
+                currentCharacterIsStatic = true;
+                currentCharacterTile = GetTile(character.transform.position.x, character.transform.position.y);
             }
             else
-                tempAllTilesIndex.Add(tileIndex);
+                currentCharacterTile = currentCharacterScript.queueTileIndex[0];
+
+
+            if (tempAllTilesIndex.Contains(currentCharacterTile))
+            {
+                Character otherCharacterScript = allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)].GetComponent<Character>();
+
+                //resolve colision
+                {
+                    //current is static so other stop path
+                    if (currentCharacterIsStatic)
+                        ClearPath(allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)]);
+                    //other is static so current stop path
+                    else if (otherCharacterScript.queueTileIndex.Count == 0)
+                        ClearPath(character);
+                    //if current is stronger he get the tile
+                    else if (currentCharacterScript.strength > otherCharacterScript.strength)
+                    {
+                        ClearPathAfterFirst(currentCharacterScript);
+                        ClearPath(allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)]);
+                    }
+                    //if other is stronger he get the tile
+                    else
+                    {
+                        ClearPathAfterFirst(otherCharacterScript);
+                        ClearPath(character);
+                    }
+                }
+
+                //resolve ball
+                if (currentCharacterScript.hasBall || otherCharacterScript.hasBall)
+                {
+                    bool isCurrentStronger = false;
+
+                    if (currentCharacterScript.strength > otherCharacterScript.strength)
+                        isCurrentStronger = true;
+                    else
+                        isCurrentStronger = false;
+
+                    currentCharacterScript.hasBall = isCurrentStronger;
+                    currentCharacterScript.ballIcon.SetActive(isCurrentStronger);
+                    otherCharacterScript.hasBall = !isCurrentStronger;
+                    otherCharacterScript.ballIcon.SetActive(!isCurrentStronger);
+                }
+                
+            }
+
+            tempAllTilesIndex.Add(currentCharacterTile);
 
         }
+    }
+    void MoveCharacters()
+    { 
 
-
-        //Apply Mvt
         foreach (GameObject character in allCharacters)
         {
             Character characterScript = character.GetComponent<Character>();
 
             if (characterScript.queueTileIndex.Count > 0)
             {
+                //Apply Mvt to Tactical
                 Vector2 tilePos = GetPosFromTile(characterScript.queueTileIndex[0]);
                 Vector3 direction = new Vector3(tilePos.x, tilePos.y, character.transform.position.z) - character.transform.position;
-
-
                 character.transform.position += direction.normalized * (speed * Time.deltaTime);
+
+                //Apply Mvt to Playmode 
+                if (characterScript.charactePlaymode != null)
+                {
+                    Vector3 directionPlaymode = new Vector3(direction.x, direction.z, direction.y);
+                    characterScript.charactePlaymode.position += directionPlaymode.normalized * (speed * Time.deltaTime);
+                }
 
                 //if you pass the waypoint remove it
                 if (Vector3.Dot(direction, new Vector3(tilePos.x, tilePos.y, character.transform.position.z) - character.transform.position) < 0)
@@ -263,8 +321,17 @@ public class GameManager : MonoBehaviour
     {
         if (ball.activeSelf && ballDestination != ball.transform.position)
         {
+            //Apply to Tactical
             Vector3 direction = ballDestination - ball.transform.position;
             ball.transform.position += direction.normalized * (speed * Time.deltaTime);
+
+            //Apply Mvt to Playmode 
+            if (ballPlaymode != null)
+            {
+                Vector3 directionPlaymode = new Vector3(direction.x, direction.z, direction.y);
+                ballPlaymode.position += directionPlaymode.normalized * (speed * Time.deltaTime);
+            }
+
 
             //if you pass the waypoint remove it
             if (Vector3.Dot(direction, ballDestination - ball.transform.position) < 0)
@@ -356,7 +423,10 @@ public class GameManager : MonoBehaviour
                     CancelThrow(characterScript);
                 //cancel Mvt
                 else
-                    ClearTrailPath(hit.transform.gameObject);
+                {
+                    ClearPath(hit.transform.gameObject);
+                    selectedEntity = null;
+                }
             }
         }
 
@@ -452,12 +522,16 @@ public class GameManager : MonoBehaviour
     //Tiles
     int GetTile(float x, float y)
     {
+        x -= initialOffset.position.x;
+        y -= initialOffset.position.y;
+
         return Mathf.RoundToInt(x + 0.5f * (length - 1)) + Mathf.RoundToInt(y + 0.5f * (height - 1)) * length;
     }
     Vector2 GetPosFromTile(int tileIndex)
     {
         return new Vector2(-0.5f * (length - 1) + tileIndex % length,
-                           -0.5f * (height - 1) + (int)(tileIndex / length));
+                           -0.5f * (height - 1) + (int)(tileIndex / length))
+             + new Vector2(initialOffset.position.x, initialOffset.position.y);
     }
     int GetOffsetAllBetweenTiles(int tileReference, int tile2) { return Mathf.Abs(GetOffsetXBetweenTiles(tileReference, tile2)) + Mathf.Abs(GetOffsetYBetweenTiles(tileReference, tile2)); }
     int GetOffsetXBetweenTiles(int tileReference, int tile2) { return tile2 % length - tileReference % length;  }
@@ -474,11 +548,11 @@ public class GameManager : MonoBehaviour
 
         for (int i = 1; i < Mathf.Abs(offsetY) + 1; ++i)
         {
-            characterScript.queueTileIndex.Add(tileReference + length * ((offsetY > 0) ? i : -i));
-
             //security so enemies cant exceed their Mvt stat
-            if (characterScript.queueTileIndex.Count == characterScript.mvt)
+            if (characterScript.queueTileIndex.Count >= characterScript.mvt)
                 return;
+
+            characterScript.queueTileIndex.Add(tileReference + length * ((offsetY > 0) ? i : -i));
         }
 
         //Reset reference tile because tiles maybe have been add
@@ -486,11 +560,11 @@ public class GameManager : MonoBehaviour
 
         for (int i = 1; i < Mathf.Abs(offsetX) + 1; ++i)
         {
-            characterScript.queueTileIndex.Add(tileReference + ((offsetX > 0) ? i : -i));
-
             //security so enemies cant exceed their Mvt stat
-            if (characterScript.queueTileIndex.Count == characterScript.mvt)
+            if (characterScript.queueTileIndex.Count >= characterScript.mvt)
                 return;
+
+            characterScript.queueTileIndex.Add(tileReference + ((offsetX > 0) ? i : -i));
         }
     
     }
@@ -549,15 +623,24 @@ public class GameManager : MonoBehaviour
         }
 
     }
-    void ClearTrailPath(GameObject character)
+    void ClearPath(GameObject character)
     {
         Character characterScript = character.GetComponent<Character>();
-        LineRenderer lr = character.GetComponent<LineRenderer>();
-
         characterScript.queueTileIndex.Clear();
-        lr.positionCount = 0;
 
-        selectedEntity = null;
+        LineRenderer lr = character.GetComponent<LineRenderer>();
+        if (lr != null)
+            lr.positionCount = 0;
+
+    }
+    void ClearPathAfterFirst(Character characterScript)
+    {
+        characterScript.queueTileIndex.RemoveRange(1, characterScript.queueTileIndex.Count - 1);
+
+        LineRenderer lr = characterScript.gameObject.GetComponent<LineRenderer>();
+        if (lr != null)
+            lr.positionCount = 1;
+
     }
     //TouchDown
     bool HasReachTouchDown(GameObject character)
@@ -597,17 +680,32 @@ public class GameManager : MonoBehaviour
             foreach (GameObject chara in allCharacters)
             {
                 Character charaScript = chara.GetComponent<Character>();
-                ClearTrailPath(chara);
+                ClearPath(chara);
                 charaScript.queueTileIndex.Clear();
                 chara.transform.position = charaScript.initialPos;
             }
 
-            ball.transform.position = ballinitialPos;
+            ball.transform.position = ballinitialPos + new Vector3(character.CompareTag("Allies")? 1 : -1, 0, 0);
             ballDestination = ball.transform.position;
             ball.SetActive(true);
         }
 
     }
+
+    public void PauseMenu()
+	{
+        if (!isInPause)
+		{
+            pauseMenu.SetActive(true);
+            isInPause = true;
+		}
+        else
+		{
+            pauseMenu.SetActive(false);
+            isInPause = false;
+        }
+            
+	}
 
 
 }
