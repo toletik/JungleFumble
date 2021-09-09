@@ -842,6 +842,11 @@ Transform:
   m_Father: {fileID: 632447039}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -92.334, y: 157.987, z: -168.377}
+--- !u!1 &219361869 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3488754683260175077, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
+  m_PrefabInstance: {fileID: 3488754681402794374}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &231380505
 GameObject:
   m_ObjectHideFlags: 0
@@ -7382,6 +7387,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1805748426}
   - component: {fileID: 1805748425}
+  - component: {fileID: 1805748427}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -7420,6 +7426,7 @@ MonoBehaviour:
   ballPlaymode: {fileID: 0}
   pauseMenu: {fileID: 569365321}
   comfirmMovementSound: event:/Actions/confirm_mouvement
+  passSound: 
 --- !u!4 &1805748426
 Transform:
   m_ObjectHideFlags: 0
@@ -7434,6 +7441,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1805748427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805748424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be2d2c8f1e4923408826bbf29429085, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tacticCam: {fileID: 583756904}
+  playCam: {fileID: 121087507}
+  fade: {fileID: 219361869}
+  transitionSpeed: 2
 --- !u!1 &1827518377
 GameObject:
   m_ObjectHideFlags: 0
@@ -9316,6 +9339,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FadeCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 3488754681680587791, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3488754683090413258, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
       propertyPath: playCam
       value: 
@@ -9324,6 +9351,14 @@ PrefabInstance:
       propertyPath: tacticCam
       value: 
       objectReference: {fileID: 583756904}
+    - target: {fileID: 3488754683090413259, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1805748427}
+    - target: {fileID: 3488754683090413259, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Fade
+      objectReference: {fileID: 0}
     - target: {fileID: 3488754683260175077, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
       propertyPath: m_IsActive
       value: 0
