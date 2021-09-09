@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!20 &74064240 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5506291277120854108, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+  m_PrefabInstance: {fileID: 5506291276472382767}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,14 +323,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1036234627102092182, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 74064240}
     - target: {fileID: 2260030566937824953, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: m_Name
       value: TacticalSet
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320229874226172180, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+      propertyPath: mvt
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320229874684185742, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+      propertyPath: mvt
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2320229874963728019, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+      propertyPath: mvt
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2320229875225337791, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: charactePlaymode
       value: 
       objectReference: {fileID: 1794786384}
+    - target: {fileID: 2320229876030977084, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+      propertyPath: mvt
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3181248254992962269, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -376,6 +401,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5506291277120854107, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8589470887391363965, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

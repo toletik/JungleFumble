@@ -172,9 +172,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3723960987663866541, guid: 2a1aa849f2ef4074e8d1c369c13ee975, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 5506291277120854108}
+    - target: {fileID: 3723960987663866541, guid: 2a1aa849f2ef4074e8d1c369c13ee975, type: 3}
       propertyPath: ball
       value: 
       objectReference: {fileID: 63175644587508373}
+    - target: {fileID: 3723960987663866541, guid: 2a1aa849f2ef4074e8d1c369c13ee975, type: 3}
+      propertyPath: initialOffset
+      value: 
+      objectReference: {fileID: 3181248254992962269}
     - target: {fileID: 3723960987663866541, guid: 2a1aa849f2ef4074e8d1c369c13ee975, type: 3}
       propertyPath: allies.Array.data[0]
       value: 
