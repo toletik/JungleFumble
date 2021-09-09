@@ -33,7 +33,6 @@ Transform:
   m_LocalScale: {x: 1, y: 0.01, z: 1}
   m_Children:
   - {fileID: 8727501029412230225}
-  - {fileID: 7789621634186321076}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
@@ -215,12 +214,12 @@ MonoBehaviour:
   ballIcon: {fileID: 5627052658221852351}
   hasBall: 0
   canPickUpBall: 1
-  characterCard: {fileID: 4826406356666409228}
-  timeToShowCard: 1
+  characterCardMat: {fileID: 2100000, guid: fdd694d7eefe28d48913f740062bfd41, type: 2}
   initialPos: {x: 0, y: 0, z: 0}
   queueTileIndex: 
   blocSound: event:/Actions/Blocage/gazelle_bloc
   catchSound: "event:/Actions/R\xE9ception/gazelle_catch"
+  cardSound: "event:/UI Sounds/S\xE9lection des joueurs/gazelle_card"
 --- !u!1001 &2786697262171376033
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -291,75 +290,4 @@ GameObject:
 Transform:
   m_CorrespondingSourceObject: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
   m_PrefabInstance: {fileID: 2786697262171376033}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &7060545109504541353
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 8290804372129808224}
-    m_Modifications:
-    - target: {fileID: 1001580070780558877, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1001580070780558877, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1001580070780558877, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1001580070780558877, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1001580070780558877, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 1001580070780558877, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 1001580070780558877, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1001580070780558877, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1001580070780558877, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 1001580070780558877, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1001580070780558877, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2523932639164507045, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-      propertyPath: m_Name
-      value: CharacterCard
-      objectReference: {fileID: 0}
-    - target: {fileID: 2523932639164507045, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
---- !u!1 &4826406356666409228 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2523932639164507045, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-  m_PrefabInstance: {fileID: 7060545109504541353}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7789621634186321076 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1001580070780558877, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-  m_PrefabInstance: {fileID: 7060545109504541353}
   m_PrefabAsset: {fileID: 0}

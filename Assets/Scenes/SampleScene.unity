@@ -272,6 +272,10 @@ PrefabInstance:
       propertyPath: mvt
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 2320229874684185742, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+      propertyPath: characterCardMat
+      value: 
+      objectReference: {fileID: 2100000, guid: c98bc3d397abeaa4fa1cafeef8a84517, type: 2}
     - target: {fileID: 2320229874963727983, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: m_LocalPosition.y
       value: -4.5
@@ -284,6 +288,10 @@ PrefabInstance:
       propertyPath: charactePlaymode
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2320229875225337791, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+      propertyPath: characterCardMat
+      value: 
+      objectReference: {fileID: 2100000, guid: 14af75b908218894b8d1ac3d01fd96fb, type: 2}
     - target: {fileID: 2320229875496580976, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: timeToShowCard
       value: 0.5

@@ -12,18 +12,20 @@ public class Character : MonoBehaviour
 
 
     [SerializeField] public Transform charactePlaymode = null;
+
     [SerializeField] public GameObject ballIcon = null;
     public bool hasBall = false;
     public bool canPickUpBall = true;
-    [SerializeField] GameObject characterCard = null;
-    [SerializeField] float timeToShowCard = 1;
-    float currentTimeToShowCard = 0;
+
+    [SerializeField] public Material characterCardMat = null;
+
 
     public Vector3 initialPos;
     public List<int> queueTileIndex = new List<int>();
 
     [SerializeField] public string blocSound = "";
     [SerializeField] public string catchSound = "";
+    [SerializeField] public string cardSound = "";
 
     // Start is called before the first frame update
     void Start()
@@ -51,17 +53,4 @@ public class Character : MonoBehaviour
     }
 
 
-    private void OnMouseOver()
-    {
-        currentTimeToShowCard += Time.deltaTime;
-
-        if(currentTimeToShowCard >= timeToShowCard)
-            characterCard.SetActive(true);
-    }
-
-    private void OnMouseExit()
-    {
-        currentTimeToShowCard = 0;
-        characterCard.SetActive(false);
-    }
 }

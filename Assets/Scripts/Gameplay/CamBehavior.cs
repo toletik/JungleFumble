@@ -13,7 +13,9 @@ public class CamBehavior : MonoBehaviour
 
 	private bool goingToPlay = true;
 	private bool canSwitch = true;
+	public bool isInSwitch = false;
 	//private bool playcam = false;
+	[SerializeField] GameManager gameManager = null;
 
 	private void Start()
 	{
@@ -21,24 +23,25 @@ public class CamBehavior : MonoBehaviour
 		
 	}
 
-	private void Update()
-	{
-		if (Input.GetKeyDown(KeyCode.Space))
-			Fade();
-	}
 
 
 
 	void FadeIn()
 	{
+		fade.GetComponent<Image>().canvasRenderer.SetAlpha(1);
 		fade.GetComponent<Image>().CrossFadeAlpha(0, transitionSpeed, false);
 		fade.SetActive(false);
 		canSwitch = true;
+
+		if(!goingToPlay)
+			gameManager.StartPlayMode();
+
 	}
 
 	void FadeOut()
 	{
 		fade.SetActive(true);
+		fade.GetComponent<Image>().canvasRenderer.SetAlpha(0);
 		fade.GetComponent<Image>().CrossFadeAlpha(1, transitionSpeed, false);
 
 	}
@@ -67,7 +70,6 @@ public class CamBehavior : MonoBehaviour
 		}
 		else
 		{
-
 			playCam.SetActive(false);
 			tacticCam.SetActive(true);
 			goingToPlay = true;
