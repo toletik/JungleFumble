@@ -33,7 +33,7 @@ Transform:
   m_LocalScale: {x: 1, y: 0.01, z: 1}
   m_Children:
   - {fileID: 6568622550208301712}
-  - {fileID: 8615343776452064138}
+  - {fileID: 1651600859083805792}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3574654407604894d873a95415081848, type: 2}
+  - {fileID: 2100000, guid: 9dde78e733ec3264aab1d90d5d0feb60, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -215,8 +215,7 @@ MonoBehaviour:
   ballIcon: {fileID: 7791629837466777726}
   hasBall: 0
   canPickUpBall: 1
-  characterCard: {fileID: 6444445581100863026}
-  timeToShowCard: 1
+  characterCardMat: {fileID: 0}
   initialPos: {x: 0, y: 0, z: 0}
   queueTileIndex: 
   blocSound: event:/Actions/Blocage/snake_bloc
@@ -348,15 +347,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
---- !u!1 &6444445581100863026 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2523932639164507045, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
-  m_PrefabInstance: {fileID: 8820733353900666263}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8615343776452064138 stripped
+--- !u!4 &1651600859083805792 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 1001580070780558877, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
   m_PrefabInstance: {fileID: 8820733353900666263}
   m_PrefabAsset: {fileID: 0}
