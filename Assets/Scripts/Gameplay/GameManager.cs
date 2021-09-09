@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class GameManager : MonoBehaviour
 {
@@ -43,6 +44,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject pauseMenu = null;
     private bool isInPause = false;
 
+
+    // sound var
+    [SerializeField] string comfirmMovementSound = "";
+    [SerializeField] string passSound = "";
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -78,8 +85,14 @@ public class GameManager : MonoBehaviour
         CheckCharactersColision();
         MoveCharacters();
         MoveBall();
+        
+        //check if reach touchdown for ball reception while in touchdown zone
+        foreach (GameObject character in allCharacters)
+            if (character.GetComponent<Character>().hasBall)
+                if (HasReachTouchDown(character))
+                    TouchDown(character);
 
-        if (!isThereStillWaypoints() && (!ball.activeSelf || ballDestination == ball.transform.position))
+                if (!isThereStillWaypoints() && (!ball.activeSelf || ballDestination == ball.transform.position))
             QuitPlayMode();
     }
     void TacticalMode()
@@ -109,6 +122,9 @@ public class GameManager : MonoBehaviour
     {
         inPlayMode = true;
         SetAIWaypoints();
+        if (ball.activeSelf && ball.transform.position != ballDestination)
+            RuntimeManager.PlayOneShot(passSound);
+
     }
     GameObject GetClosestCharacterToTile(List<GameObject> characters, int tileIndex)
     {
@@ -209,7 +225,6 @@ public class GameManager : MonoBehaviour
 
 
     }
-
     void CheckCharactersColision()
     {
 
@@ -239,22 +254,30 @@ public class GameManager : MonoBehaviour
                 //resolve colision
                 {
                     //current is static so other stop path
-                    if (currentCharacterIsStatic)
+                    if (currentCharacterIsStatic) 
+                    {
                         ClearPath(allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)]);
+                        RuntimeManager.PlayOneShot(otherCharacterScript.blocSound);
+                    }
                     //other is static so current stop path
                     else if (otherCharacterScript.queueTileIndex.Count == 0)
+                    {
                         ClearPath(character);
+                        RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
+                    }
                     //if current is stronger he get the tile
-                    else if (currentCharacterScript.strength > otherCharacterScript.strength)
+                    else if (currentCharacterScript.strength > otherCharacterScript.strength) 
                     {
                         ClearPathAfterFirst(currentCharacterScript);
                         ClearPath(allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)]);
+                        RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
                     }
                     //if other is stronger he get the tile
-                    else
+                    else // other
                     {
                         ClearPathAfterFirst(otherCharacterScript);
                         ClearPath(character);
+                        RuntimeManager.PlayOneShot(otherCharacterScript.blocSound);
                     }
                 }
 
@@ -391,6 +414,8 @@ public class GameManager : MonoBehaviour
 
                 if (selectedEntity != null && indexHighlightTiles.Contains(tileIndex))
                 {
+                    
+
                     if (selectedEntityTryToMove)
                         TileSelectMove(selectedEntity, tileIndex);
                     else
@@ -646,7 +671,7 @@ public class GameManager : MonoBehaviour
     bool HasReachTouchDown(GameObject character)
     {
         Character characterScript = character.GetComponent<Character>();
-        float tileXValue = characterScript.queueTileIndex[0] % length;
+        float tileXValue = GetTile(character.transform.position.x, character.transform.position.y) % length;
 
         if ((tileXValue < touchDownLength && character.CompareTag("Enemies")) ||
             (tileXValue >= length - touchDownLength && character.CompareTag("Allies")) )

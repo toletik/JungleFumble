@@ -73,6 +73,8 @@ MonoBehaviour:
   ball: {fileID: 0}
   ballPlaymode: {fileID: 0}
   pauseMenu: {fileID: 4482084169176570510}
+  comfirmMovementSound: event:/Actions/confirm_mouvement
+  passSound: event:/Actions/pass
 --- !u!114 &5403393136401232454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,7 +89,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tacticCam: {fileID: 0}
   playCam: {fileID: 0}
-  fade: {fileID: 4396246988998318887}
+  fade: {fileID: 0}
   transitionSpeed: 2
 --- !u!1 &3723960987749953523
 GameObject:
@@ -387,17 +389,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3488754681680587787, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
   m_PrefabInstance: {fileID: 966040530046949829}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4396246988998318887 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3488754683260175074, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
-  m_PrefabInstance: {fileID: 966040530046949829}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2608601188952133926
 PrefabInstance:
   m_ObjectHideFlags: 0
