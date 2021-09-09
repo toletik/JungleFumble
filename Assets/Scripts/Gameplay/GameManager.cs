@@ -8,11 +8,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] int   height = 14;
     [SerializeField] float speed = 10;
     [SerializeField] int   touchDownLength = 0;
+    [SerializeField] int   nbOfPointsToWin = 0;
+    [SerializeField] GameObject winScreen = null;
+    [SerializeField] GameObject loseScreen = null;
+
+
+
 
     [SerializeField] Camera cam = null;
     [SerializeField] GameObject map = null;
     [SerializeField] GameObject highlightTileParent = null;
     [SerializeField] GameObject gridParent = null;
+    [SerializeField] Material gridMat = null;
 
 
     GameObject selectedEntity = null;
@@ -390,9 +397,9 @@ public class GameManager : MonoBehaviour
         {
             GameObject line = GameObject.CreatePrimitive(PrimitiveType.Quad);
             line.transform.SetParent(gridParent.transform);
-            line.transform.localScale = new Vector3(0.1f, height, 0.1f);
+            line.transform.localScale = new Vector3(0.05f, height, 0.05f);
             line.transform.localPosition = new Vector3(minX + l, 0, 0);
-            line.GetComponent<Renderer>().material.color = Color.black;
+            line.GetComponent<Renderer>().material = gridMat;
         }
 
         //Horizontal
@@ -401,9 +408,9 @@ public class GameManager : MonoBehaviour
         {
             GameObject line = GameObject.CreatePrimitive(PrimitiveType.Quad);
             line.transform.SetParent(gridParent.transform);
-            line.transform.localScale = new Vector3(length, 0.1f, 0.1f);
+            line.transform.localScale = new Vector3(length, 0.05f, 0.05f);
             line.transform.localPosition = new Vector3(0, minY + h, 0);
-            line.GetComponent<Renderer>().material.color = Color.black;
+            line.GetComponent<Renderer>().material = gridMat;
         }
 
 
@@ -566,32 +573,40 @@ public class GameManager : MonoBehaviour
     }
     void TouchDown(GameObject character)
     {
-        QuitPlayMode();
-
-        Character characterScript = character.GetComponent<Character>();
-        characterScript.hasBall = false;
-        characterScript.ballIcon.SetActive(false);
-
+        //update score
         if (character.CompareTag("Allies"))
             scoreAllies++;
         else
             scoreEnemies++;
 
-        Debug.Log("TOUCHDOWN !");
-        Debug.Log("Score Allies : " + scoreAllies);
-        Debug.Log("Score Enemies : " + scoreEnemies);
 
-        foreach (GameObject chara in allCharacters)
+        //Finish or reset pos
+        if (scoreAllies >= nbOfPointsToWin)
+            winScreen.SetActive(true);
+        else if (scoreEnemies >= nbOfPointsToWin)
+            loseScreen.SetActive(true);
+        else
         {
-            Character charaScript = chara.GetComponent<Character>();
-            ClearTrailPath(chara);
-            charaScript.queueTileIndex.Clear();
-            chara.transform.position = charaScript.initialPos;
+            QuitPlayMode();
+
+            Character characterScript = character.GetComponent<Character>();
+            characterScript.hasBall = false;
+            characterScript.ballIcon.SetActive(false);
+
+
+            foreach (GameObject chara in allCharacters)
+            {
+                Character charaScript = chara.GetComponent<Character>();
+                ClearTrailPath(chara);
+                charaScript.queueTileIndex.Clear();
+                chara.transform.position = charaScript.initialPos;
+            }
+
+            ball.transform.position = ballinitialPos;
+            ballDestination = ball.transform.position;
+            ball.SetActive(true);
         }
 
-        ball.transform.position = ballinitialPos;
-        ballDestination = ball.transform.position;
-        ball.SetActive(true);
     }
 
 
