@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
 
     [SerializeField] Transform initialOffset = null;
+    [SerializeField] Transform initialOffsetPlaymode = null;
     [SerializeField] Camera cam = null;
     [SerializeField] GameObject map = null;
     [SerializeField] GameObject highlightTileParent = null;
@@ -56,14 +57,23 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ballinitialPos = ball.transform.position;
-        ballDestination = ball.transform.position;
         map.transform.localScale = new Vector3(length, height, 1);
+        GenerateGrid();
+
         foreach (GameObject character in allies)
             allCharacters.Add(character);
         foreach (GameObject character in enemies)
             allCharacters.Add(character);
-        GenerateGrid();
+        /*
+        foreach (GameObject character in allCharacters)
+        {
+            Character characterScript = character.GetComponent<Character>();
+            characterScript.charactePlaymode.position
+        }*/
+
+        ballinitialPos = ball.transform.position;
+        ballDestination = ball.transform.position;
+
     }
 
     // Update is called once per frame
