@@ -67,12 +67,13 @@ public class GameManager : MonoBehaviour
             allCharacters.Add(character);
         foreach (GameObject character in enemies)
             allCharacters.Add(character);
-        /*
+        
+        //Set position of all CharacterPlaymode
         foreach (GameObject character in allCharacters)
         {
             Character characterScript = character.GetComponent<Character>();
-            characterScript.charactePlaymode.position
-        }*/
+            characterScript.charactePlaymode.position = new Vector3(character.transform.localPosition.x + initialOffsetPlaymode.position.x, characterScript.charactePlaymode.position.y, character.transform.localPosition.y + initialOffsetPlaymode.position.z);
+        }
 
         ballinitialPos = ball.transform.position;
         ballDestination = ball.transform.position;

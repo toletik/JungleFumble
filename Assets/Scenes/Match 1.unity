@@ -166,6 +166,10 @@ PrefabInstance:
       propertyPath: alliesScoreText
       value: 
       objectReference: {fileID: 331594615}
+    - target: {fileID: 1036234627102092182, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+      propertyPath: initialOffsetPlaymode
+      value: 
+      objectReference: {fileID: 1990208426}
     - target: {fileID: 2088962640036818701, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: charactePlaymode
       value: 
@@ -299,8 +303,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bff69a030c7e54a9eb857989ba05c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentCam: {fileID: 781599898}
-  cam: {fileID: 0}
 --- !u!102 &331594617
 TextMesh:
   serializedVersion: 3
@@ -393,6 +395,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 9.76
       objectReference: {fileID: 0}
+    - target: {fileID: 3988403646585082227, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3988403646592088224, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3988403647481715256, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.5
@@ -432,6 +442,14 @@ PrefabInstance:
     - target: {fileID: 3988403647481715261, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
       propertyPath: m_TagString
       value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 4905907743990147499, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 4905907744191017255, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.73
       objectReference: {fileID: 0}
     - target: {fileID: 8916927721033059891, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
       propertyPath: m_RootOrder
@@ -524,11 +542,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3988403647481715261, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
   m_PrefabInstance: {fileID: 781599885}
   m_PrefabAsset: {fileID: 0}
---- !u!20 &781599898 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 3988403647481715259, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
-  m_PrefabInstance: {fileID: 781599885}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &997383244
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,8 +573,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5bff69a030c7e54a9eb857989ba05c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentCam: {fileID: 781599898}
-  cam: {fileID: 0}
 --- !u!102 &997383246
 TextMesh:
   serializedVersion: 3
@@ -798,3 +809,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!4 &1990208426 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3988403646359626966, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
+  m_PrefabInstance: {fileID: 781599885}
+  m_PrefabAsset: {fileID: 0}
