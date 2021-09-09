@@ -78,8 +78,14 @@ public class GameManager : MonoBehaviour
         CheckCharactersColision();
         MoveCharacters();
         MoveBall();
+        
+        //check if reach touchdown for ball reception while in touchdown zone
+        foreach (GameObject character in allCharacters)
+            if (character.GetComponent<Character>().hasBall)
+                if (HasReachTouchDown(character))
+                    TouchDown(character);
 
-        if (!isThereStillWaypoints() && (!ball.activeSelf || ballDestination == ball.transform.position))
+                if (!isThereStillWaypoints() && (!ball.activeSelf || ballDestination == ball.transform.position))
             QuitPlayMode();
     }
     void TacticalMode()
@@ -209,7 +215,6 @@ public class GameManager : MonoBehaviour
 
 
     }
-
     void CheckCharactersColision()
     {
 
@@ -646,7 +651,7 @@ public class GameManager : MonoBehaviour
     bool HasReachTouchDown(GameObject character)
     {
         Character characterScript = character.GetComponent<Character>();
-        float tileXValue = characterScript.queueTileIndex[0] % length;
+        float tileXValue = GetTile(character.transform.position.x, character.transform.position.y) % length;
 
         if ((tileXValue < touchDownLength && character.CompareTag("Enemies")) ||
             (tileXValue >= length - touchDownLength && character.CompareTag("Allies")) )

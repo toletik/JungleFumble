@@ -2,15 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
-struct Stats
-{
-   float mvt;
-   float strength;
-   float range;
-   float precision;
-   float catchUp;
-}*/
 
 public class Character : MonoBehaviour
 {

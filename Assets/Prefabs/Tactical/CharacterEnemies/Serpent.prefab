@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8290804372129808284}
   m_Layer: 0
   m_Name: Serpent
-  m_TagString: Allies
+  m_TagString: Enemies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -213,9 +213,10 @@ MonoBehaviour:
   range: 3
   charactePlaymode: {fileID: 0}
   ballIcon: {fileID: 3418687647323786692}
-  characterCard: {fileID: 6924432793691242707}
   hasBall: 0
   canPickUpBall: 1
+  characterCard: {fileID: 6924432793691242707}
+  timeToShowCard: 1
   initialPos: {x: 0, y: 0, z: 0}
   queueTileIndex: 
 --- !u!1001 &4836384055633273718
