@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     uint scoreEnemies = 0;
 
 
+    [SerializeField] public GameObject characterCard = null;
     [SerializeField] GameObject ball = null;
     [SerializeField] Transform ballPlaymode = null;
     Vector3 ballinitialPos = Vector3.zero;
@@ -82,7 +83,7 @@ public class GameManager : MonoBehaviour
 
     void PlayMode()
     {
-        CheckCharactersColision();
+        ResolveCharacterColision();
         MoveCharacters();
         MoveBall();
         
@@ -225,9 +226,8 @@ public class GameManager : MonoBehaviour
 
 
     }
-    void CheckCharactersColision()
+    void ResolveCharacterColision()
     {
-
         List<int> tempAllTilesIndex = new List<int>();
 
         //Check if two character want to access same tile or a character want to move to a tile of a static character
@@ -391,6 +391,10 @@ public class GameManager : MonoBehaviour
             if (hit.transform.CompareTag("Allies"))
             {
                 Character characterScript = hit.transform.GetComponent<Character>();
+                RuntimeManager.PlayOneShot(characterScript.cardSound);
+
+                characterCard.SetActive(true);
+                characterCard.GetComponent<Renderer>().material = characterScript.characterCardMat;
 
                 //if not throwing already
                 if (characterScript.canPickUpBall)
@@ -400,11 +404,17 @@ public class GameManager : MonoBehaviour
                     selectedEntityTryToMove = true;
                     GenerateHighlightTiles(characterScript.queueTileIndex.Count == 0 ? GetTile(hit.point.x, hit.point.y) : characterScript.queueTileIndex[characterScript.queueTileIndex.Count - 1], characterScript.mvt - characterScript.queueTileIndex.Count, Color.blue);
                 }
+
             }
             //select Enemies
             else if (hit.transform.CompareTag("Enemies"))
             {
-                GenerateHighlightTiles(GetTile(hit.point.x, hit.point.y), hit.transform.GetComponent<Character>().mvt, Color.red);
+                Character characterScript = hit.transform.GetComponent<Character>();
+                RuntimeManager.PlayOneShot(characterScript.cardSound);
+                GenerateHighlightTiles(GetTile(hit.point.x, hit.point.y), characterScript.mvt, Color.red);
+                characterCard.SetActive(true);
+                characterCard.GetComponent<Renderer>().material = characterScript.characterCardMat;
+
                 selectedEntity = null;
             }
             //select a Tile
@@ -414,7 +424,7 @@ public class GameManager : MonoBehaviour
 
                 if (selectedEntity != null && indexHighlightTiles.Contains(tileIndex))
                 {
-                    
+                    RuntimeManager.PlayOneShot(comfirmMovementSound);
 
                     if (selectedEntityTryToMove)
                         TileSelectMove(selectedEntity, tileIndex);
@@ -423,6 +433,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
+                    characterCard.SetActive(false);
                     ClearHighlightTiles();
                     selectedEntity = null;
                 }
