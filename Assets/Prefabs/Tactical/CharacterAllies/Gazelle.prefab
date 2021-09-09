@@ -214,7 +214,7 @@ MonoBehaviour:
   ballIcon: {fileID: 5627052658221852351}
   hasBall: 0
   canPickUpBall: 1
-  characterCardTexture: {fileID: 2800000, guid: d960614431feae14da9e56372dfbe075, type: 3}
+  characterCardMat: {fileID: 2100000, guid: fdd694d7eefe28d48913f740062bfd41, type: 2}
   initialPos: {x: 0, y: 0, z: 0}
   queueTileIndex: 
   blocSound: event:/Actions/Blocage/gazelle_bloc

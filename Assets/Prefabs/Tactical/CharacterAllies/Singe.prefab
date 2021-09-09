@@ -214,7 +214,7 @@ MonoBehaviour:
   ballIcon: {fileID: 5940533510624861943}
   hasBall: 0
   canPickUpBall: 1
-  characterCardTexture: {fileID: 0}
+  characterCardMat: {fileID: 2100000, guid: 89654c31b0d3cbe4f8c1d5833f1c60fa, type: 2}
   initialPos: {x: 0, y: 0, z: 0}
   queueTileIndex: 
   blocSound: event:/Actions/Blocage/monkey_bloc
