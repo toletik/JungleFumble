@@ -75,6 +75,7 @@ public class GameManager : MonoBehaviour
 
     void PlayMode()
     {
+        CheckCharactersColison();
         MoveCharacters();
         MoveBall();
 
@@ -206,6 +207,11 @@ public class GameManager : MonoBehaviour
             tempEnemies.Remove(closestEnemy);
         }
 
+
+    }
+
+    void CheckCharactersColison()
+    {
 
     }
     void MoveCharacters()
