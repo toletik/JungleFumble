@@ -50,6 +50,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] string comfirmMovementSound = "";
     [SerializeField] string passSound = "";
 
+    [SerializeField] CamBehavior camBehavior = null;
+
 
     // Start is called before the first frame update
     void Start()
@@ -72,8 +74,6 @@ public class GameManager : MonoBehaviour
         else
             TacticalMode();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-            PauseMenu();
 
 
 
@@ -93,25 +93,32 @@ public class GameManager : MonoBehaviour
                 if (HasReachTouchDown(character))
                     TouchDown(character);
 
-                if (!isThereStillWaypoints() && (!ball.activeSelf || ballDestination == ball.transform.position))
+        if (!isThereStillWaypoints() && (!ball.activeSelf || ballDestination == ball.transform.position))
             QuitPlayMode();
     }
     void TacticalMode()
     {
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        if(!camBehavior.isInSwitch)
         {
-            ClearHighlightTiles();
-            StartPlayMode();
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+                PauseMenu();
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                ClearHighlightTiles();
+                camBehavior.isInSwitch = true;
+                Debug.Log("INPUT");
+                camBehavior.Fade();
+            }
+
+            if (Input.GetMouseButtonDown(0))
+                OnLeftClick();
+            if (Input.GetMouseButtonDown(1))
+                OnRightClick();
+            if (Input.GetMouseButtonDown(2))
+                OnMiddleClick();
         }
-
-
-        if (Input.GetMouseButtonDown(0))
-            OnLeftClick();
-        if (Input.GetMouseButtonDown(1))
-            OnRightClick();
-        if (Input.GetMouseButtonDown(2))
-            OnMiddleClick();
 
     }
 
@@ -119,7 +126,7 @@ public class GameManager : MonoBehaviour
 
 
     //Playmode
-    void StartPlayMode()
+    public void StartPlayMode()
     {
         inPlayMode = true;
         SetAIWaypoints();
@@ -373,10 +380,14 @@ public class GameManager : MonoBehaviour
     }
     void QuitPlayMode()
     {
-        inPlayMode = false;
-
         foreach (GameObject character in allCharacters)
             character.GetComponent<Character>().canPickUpBall = true;
+
+        Debug.Log("Quit");
+        camBehavior.Fade();
+        camBehavior.isInSwitch = false;
+        inPlayMode = false;
+
     }
     //TacticalMode
     void OnLeftClick()
@@ -387,6 +398,8 @@ public class GameManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
+            Debug.Log(hit.transform.name);
+
             //select Allies
             if (hit.transform.CompareTag("Allies"))
             {

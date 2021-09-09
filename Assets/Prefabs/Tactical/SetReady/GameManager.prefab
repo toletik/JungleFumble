@@ -76,6 +76,7 @@ MonoBehaviour:
   pauseMenu: {fileID: 4482084169176570510}
   comfirmMovementSound: event:/Actions/confirm_mouvement
   passSound: event:/Actions/pass
+  camBehavior: {fileID: 5403393136401232454}
 --- !u!114 &5403393136401232454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,6 +93,7 @@ MonoBehaviour:
   playCam: {fileID: 0}
   fade: {fileID: 0}
   transitionSpeed: 2
+  gameManager: {fileID: 3723960987663866541}
 --- !u!1 &3723960987749953523
 GameObject:
   m_ObjectHideFlags: 0
