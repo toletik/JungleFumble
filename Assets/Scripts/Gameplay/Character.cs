@@ -23,6 +23,9 @@ public class Character : MonoBehaviour
     [SerializeField] public GameObject ballIcon = null;
     public bool hasBall = false;
     public bool canPickUpBall = true;
+    [SerializeField] GameObject characterCard = null;
+    [SerializeField] float timeToShowCard = 1;
+    float currentTimeToShowCard = 0;
 
     public Vector3 initialPos;
     public List<int> queueTileIndex = new List<int>();
@@ -51,4 +54,18 @@ public class Character : MonoBehaviour
         }
     }
 
+
+    private void OnMouseOver()
+    {
+        currentTimeToShowCard += Time.deltaTime;
+
+        if(currentTimeToShowCard >= timeToShowCard)
+            characterCard.SetActive(true);
+    }
+
+    private void OnMouseExit()
+    {
+        currentTimeToShowCard = 0;
+        characterCard.SetActive(false);
+    }
 }

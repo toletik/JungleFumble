@@ -685,7 +685,7 @@ public class GameManager : MonoBehaviour
                 chara.transform.position = charaScript.initialPos;
             }
 
-            ball.transform.position = ballinitialPos;
+            ball.transform.position = ballinitialPos + new Vector3(character.CompareTag("Allies")? 1 : -1, 0, 0);
             ballDestination = ball.transform.position;
             ball.SetActive(true);
         }
