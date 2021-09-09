@@ -221,6 +221,7 @@ MonoBehaviour:
   queueTileIndex: 
   blocSound: event:/Actions/Blocage/panther_bloc
   catchSound: "event:/Actions/R\xE9ception/panther_catch"
+  cardSound: "event:/UI Sounds/S\xE9lection des joueurs/panther_card"
 --- !u!1001 &6461540192473426570
 PrefabInstance:
   m_ObjectHideFlags: 0

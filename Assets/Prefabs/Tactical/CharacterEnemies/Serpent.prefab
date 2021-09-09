@@ -221,6 +221,7 @@ MonoBehaviour:
   queueTileIndex: 
   blocSound: event:/Actions/Blocage/snake_bloc
   catchSound: "event:/Actions/R\xE9ception/snake_catch"
+  cardSound: "event:/UI Sounds/S\xE9lection des joueurs/snake_card"
 --- !u!1001 &4836384055633273718
 PrefabInstance:
   m_ObjectHideFlags: 0

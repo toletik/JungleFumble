@@ -386,6 +386,7 @@ public class GameManager : MonoBehaviour
             if (hit.transform.CompareTag("Allies"))
             {
                 Character characterScript = hit.transform.GetComponent<Character>();
+                RuntimeManager.PlayOneShot(characterScript.cardSound);
 
                 //if not throwing already
                 if (characterScript.canPickUpBall)
@@ -395,11 +396,14 @@ public class GameManager : MonoBehaviour
                     selectedEntityTryToMove = true;
                     GenerateHighlightTiles(characterScript.queueTileIndex.Count == 0 ? GetTile(hit.point.x, hit.point.y) : characterScript.queueTileIndex[characterScript.queueTileIndex.Count - 1], characterScript.mvt - characterScript.queueTileIndex.Count, Color.blue);
                 }
+
             }
             //select Enemies
             else if (hit.transform.CompareTag("Enemies"))
             {
-                GenerateHighlightTiles(GetTile(hit.point.x, hit.point.y), hit.transform.GetComponent<Character>().mvt, Color.red);
+                Character characterScript = hit.transform.GetComponent<Character>();
+                RuntimeManager.PlayOneShot(characterScript.cardSound);
+                GenerateHighlightTiles(GetTile(hit.point.x, hit.point.y), characterScript.mvt, Color.red);
                 selectedEntity = null;
             }
             //select a Tile
