@@ -17,8 +17,7 @@ public class Character : MonoBehaviour
     public bool hasBall = false;
     public bool canPickUpBall = true;
 
-    [SerializeField] public GameObject characterCard        = null;
-    [SerializeField] public Texture    characterCardTexture = null;
+    [SerializeField] public Material characterCardMat = null;
 
 
     public Vector3 initialPos;

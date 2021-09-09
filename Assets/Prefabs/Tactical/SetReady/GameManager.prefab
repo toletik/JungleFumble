@@ -70,6 +70,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  characterCard: {fileID: 6165135199969248995}
   ball: {fileID: 0}
   ballPlaymode: {fileID: 0}
   pauseMenu: {fileID: 4482084169176570510}
@@ -151,6 +152,7 @@ Transform:
   - {fileID: 3723960988305491914}
   - {fileID: 3723960988249923451}
   - {fileID: 3723960987749953522}
+  - {fileID: 3794817310667188180}
   m_Father: {fileID: 3723960987663866540}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -212,7 +214,7 @@ Transform:
   m_GameObject: {fileID: 3723960988305491927}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 21, y: 12, z: 1}
   m_Children: []
   m_Father: {fileID: 3723960987921662947}
   m_RootOrder: 0
@@ -495,4 +497,71 @@ GameObject:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1873518592751602604, guid: 5dfc098d2402dc04db112d1b76b24b62, type: 3}
   m_PrefabInstance: {fileID: 2608601188952133926}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6353389710266195491
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3723960987921662947}
+    m_Modifications:
+    - target: {fileID: 983248767663036608, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+      propertyPath: m_Name
+      value: CharacterCard
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -8.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+--- !u!1 &6165135199969248995 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 983248767663036608, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+  m_PrefabInstance: {fileID: 6353389710266195491}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3794817310667188180 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7818847617296366071, guid: a567a0d8aa1172c459d7a2b064bfa426, type: 3}
+  m_PrefabInstance: {fileID: 6353389710266195491}
   m_PrefabAsset: {fileID: 0}

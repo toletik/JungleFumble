@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     uint scoreEnemies = 0;
 
 
+    [SerializeField] public GameObject characterCard = null;
     [SerializeField] GameObject ball = null;
     [SerializeField] Transform ballPlaymode = null;
     Vector3 ballinitialPos = Vector3.zero;
@@ -392,8 +393,8 @@ public class GameManager : MonoBehaviour
                 Character characterScript = hit.transform.GetComponent<Character>();
                 RuntimeManager.PlayOneShot(characterScript.cardSound);
 
-                //characterScript.characterCard.SetActive(true);
-                //characterScript.characterCard.GetComponent<Renderer>().material.SetTexture("", characterScript.characterCardTexture);
+                characterCard.SetActive(true);
+                characterCard.GetComponent<Renderer>().material = characterScript.characterCardMat;
 
                 //if not throwing already
                 if (characterScript.canPickUpBall)
@@ -411,6 +412,9 @@ public class GameManager : MonoBehaviour
                 Character characterScript = hit.transform.GetComponent<Character>();
                 RuntimeManager.PlayOneShot(characterScript.cardSound);
                 GenerateHighlightTiles(GetTile(hit.point.x, hit.point.y), characterScript.mvt, Color.red);
+                characterCard.SetActive(true);
+                characterCard.GetComponent<Renderer>().material = characterScript.characterCardMat;
+
                 selectedEntity = null;
             }
             //select a Tile
@@ -429,6 +433,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
+                    characterCard.SetActive(false);
                     ClearHighlightTiles();
                     selectedEntity = null;
                 }
