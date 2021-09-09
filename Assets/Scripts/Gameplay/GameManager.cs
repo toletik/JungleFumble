@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
     Vector3 ballDestination = Vector3.zero;
 
 
+    [SerializeField] GameObject pauseMenu = null;
+    private bool isInPause = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,6 +56,13 @@ public class GameManager : MonoBehaviour
             PlayMode();
         else
             TacticalMode();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            PauseMenu();
+            
+            
+
+        
     }
 
 
@@ -593,6 +603,23 @@ public class GameManager : MonoBehaviour
         ballDestination = ball.transform.position;
         ball.SetActive(true);
     }
+
+    public void PauseMenu()
+	{
+        if (!isInPause)
+		{
+            pauseMenu.SetActive(true);
+            isInPause = true;
+		}
+        else
+		{
+            pauseMenu.SetActive(false);
+            isInPause = false;
+        }
+            
+            
+
+	}
 
 
 }
