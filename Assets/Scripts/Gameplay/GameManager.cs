@@ -52,6 +52,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] CamBehavior camBehavior = null;
 
+    [SerializeField] GameObject alliesScoreText = null;
+    [SerializeField] GameObject enemyScoreText = null;
+
 
     // Start is called before the first frame update
     void Start()
@@ -707,9 +710,17 @@ public class GameManager : MonoBehaviour
     {
         //update score
         if (character.CompareTag("Allies"))
+		{
             scoreAllies++;
+            alliesScoreText.GetComponent<TextMesh>().text = scoreAllies.ToString();
+
+        }   
         else
+		{
             scoreEnemies++;
+            enemyScoreText.GetComponent<TextMesh>().text = scoreEnemies.ToString();
+        }
+            
 
 
         //Finish or reset pos
