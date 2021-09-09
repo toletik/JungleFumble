@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
 
 
+    [SerializeField] Transform initialOffset = null;
     [SerializeField] Camera cam = null;
     [SerializeField] GameObject map = null;
     [SerializeField] GameObject highlightTileParent = null;
@@ -452,12 +453,16 @@ public class GameManager : MonoBehaviour
     //Tiles
     int GetTile(float x, float y)
     {
+        x -= initialOffset.position.x;
+        y -= initialOffset.position.y;
+
         return Mathf.RoundToInt(x + 0.5f * (length - 1)) + Mathf.RoundToInt(y + 0.5f * (height - 1)) * length;
     }
     Vector2 GetPosFromTile(int tileIndex)
     {
         return new Vector2(-0.5f * (length - 1) + tileIndex % length,
-                           -0.5f * (height - 1) + (int)(tileIndex / length));
+                           -0.5f * (height - 1) + (int)(tileIndex / length))
+             + new Vector2(initialOffset.position.x, initialOffset.position.y);
     }
     int GetOffsetAllBetweenTiles(int tileReference, int tile2) { return Mathf.Abs(GetOffsetXBetweenTiles(tileReference, tile2)) + Mathf.Abs(GetOffsetYBetweenTiles(tileReference, tile2)); }
     int GetOffsetXBetweenTiles(int tileReference, int tile2) { return tile2 % length - tileReference % length;  }
