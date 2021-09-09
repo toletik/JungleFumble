@@ -637,8 +637,6 @@ public class GameManager : MonoBehaviour
             isInPause = false;
         }
             
-            
-
 	}
 
 
