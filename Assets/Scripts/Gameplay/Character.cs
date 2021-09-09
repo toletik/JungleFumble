@@ -17,8 +17,6 @@ public class Character : MonoBehaviour
     [SerializeField] public int mvt;
     [SerializeField] public int strength = 0;
     [SerializeField] public int range = 0;
-    [SerializeField] public int precision = 0;
-    [SerializeField] public int catchUp = 0;
 
     [SerializeField] public GameObject ballIcon = null;
     public bool hasBall = false;

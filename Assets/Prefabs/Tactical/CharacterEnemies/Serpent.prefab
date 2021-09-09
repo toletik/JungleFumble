@@ -303,8 +303,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7c65bc80f560784c9c5d3defde416c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mvt: 3
-  strength: 0
+  mvt: 7
+  strength: 36
   range: 3
   precision: 0
   catchUp: 0
