@@ -213,11 +213,14 @@ MonoBehaviour:
   range: 4
   charactePlaymode: {fileID: 0}
   ballIcon: {fileID: 5940533510624861943}
-  characterCard: {fileID: 6136863767290558905}
   hasBall: 0
   canPickUpBall: 1
+  characterCard: {fileID: 6136863767290558905}
+  timeToShowCard: 1
   initialPos: {x: 0, y: 0, z: 0}
   queueTileIndex: 
+  blocSound: event:/Actions/Blocage/monkey_bloc
+  catchSound: "event:/Actions/R\xE9ception/monkey_catch"
 --- !u!1001 &4236228299394986473
 PrefabInstance:
   m_ObjectHideFlags: 0

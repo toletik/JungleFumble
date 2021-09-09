@@ -219,6 +219,8 @@ MonoBehaviour:
   timeToShowCard: 1
   initialPos: {x: 0, y: 0, z: 0}
   queueTileIndex: 
+  blocSound: event:/Actions/Blocage/snake_bloc
+  catchSound: "event:/Actions/R\xE9ception/snake_catch"
 --- !u!1001 &4836384055633273718
 PrefabInstance:
   m_ObjectHideFlags: 0

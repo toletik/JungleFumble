@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class GameManager : MonoBehaviour
 {
@@ -42,6 +43,12 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject pauseMenu = null;
     private bool isInPause = false;
+
+
+    // sound var
+    [SerializeField] string comfirmMovementSound = "";
+    [SerializeField] string passSound = "";
+
 
     // Start is called before the first frame update
     void Start()
@@ -115,6 +122,9 @@ public class GameManager : MonoBehaviour
     {
         inPlayMode = true;
         SetAIWaypoints();
+        if (ball.activeSelf && ball.transform.position != ballDestination)
+            RuntimeManager.PlayOneShot(passSound);
+
     }
     GameObject GetClosestCharacterToTile(List<GameObject> characters, int tileIndex)
     {
@@ -244,22 +254,30 @@ public class GameManager : MonoBehaviour
                 //resolve colision
                 {
                     //current is static so other stop path
-                    if (currentCharacterIsStatic)
+                    if (currentCharacterIsStatic) 
+                    {
                         ClearPath(allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)]);
+                        RuntimeManager.PlayOneShot(otherCharacterScript.blocSound);
+                    }
                     //other is static so current stop path
                     else if (otherCharacterScript.queueTileIndex.Count == 0)
+                    {
                         ClearPath(character);
+                        RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
+                    }
                     //if current is stronger he get the tile
-                    else if (currentCharacterScript.strength > otherCharacterScript.strength)
+                    else if (currentCharacterScript.strength > otherCharacterScript.strength) 
                     {
                         ClearPathAfterFirst(currentCharacterScript);
                         ClearPath(allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)]);
+                        RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
                     }
                     //if other is stronger he get the tile
-                    else
+                    else // other
                     {
                         ClearPathAfterFirst(otherCharacterScript);
                         ClearPath(character);
+                        RuntimeManager.PlayOneShot(otherCharacterScript.blocSound);
                     }
                 }
 
@@ -396,6 +414,8 @@ public class GameManager : MonoBehaviour
 
                 if (selectedEntity != null && indexHighlightTiles.Contains(tileIndex))
                 {
+                    
+
                     if (selectedEntityTryToMove)
                         TileSelectMove(selectedEntity, tileIndex);
                     else
