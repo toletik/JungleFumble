@@ -25,6 +25,7 @@ public class Character : MonoBehaviour
 
     [SerializeField] public string blocSound = "";
     [SerializeField] public string catchSound = "";
+    [SerializeField] public string cardSound = "";
 
     // Start is called before the first frame update
     void Start()
