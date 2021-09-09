@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 6356548117508039372}
   - component: {fileID: 8290804372129808284}
   m_Layer: 0
-  m_Name: Character1
+  m_Name: Panthere
   m_TagString: Allies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -304,8 +304,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mvt: 3
-  strength: 0
-  range: 3
+  strength: 58
+  range: 6
   precision: 0
   catchUp: 0
   ballIcon: {fileID: 1529955701136796660}
