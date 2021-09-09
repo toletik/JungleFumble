@@ -11,8 +11,7 @@ public class ChangeMatOnMouseOver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentMat = GetComponent<Renderer>().material;
-        firstMat = currentMat;
+        firstMat = GetComponent<Renderer>().material;
     }
 
     // Update is called once per frame
@@ -23,12 +22,11 @@ public class ChangeMatOnMouseOver : MonoBehaviour
 
 	private void OnMouseOver()
 	{
-        currentMat = mat;
-        Debug.Log("onMouseOver");
+        GetComponent<Renderer>().material = mat;
 	}
 
 	private void OnMouseExit()
 	{
-        currentMat = firstMat;
+        GetComponent<Renderer>().material = firstMat;
 	}
 }
