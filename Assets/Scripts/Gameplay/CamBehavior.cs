@@ -8,38 +8,42 @@ public class CamBehavior : MonoBehaviour
 {
     [SerializeField] GameObject tacticCam;
     [SerializeField] GameObject playCam;
-	[SerializeField] Image fade;
+	[SerializeField] GameObject fade;
 	[SerializeField] float transitionSpeed = 2.0f;
 
 	private bool goingToPlay = true;
 	private bool canSwitch = true;
+	public bool isInSwitch = false;
 	//private bool playcam = false;
+	[SerializeField] GameManager gameManager = null;
 
 	private void Start()
 	{
-		fade.canvasRenderer.SetAlpha(0.0f);
+		fade.GetComponent<CanvasRenderer>().SetAlpha(0.0f);
 		
-
 	}
 
-	private void Update()
-	{
-		if (Input.GetKeyDown(KeyCode.Space))
-			Fade();
-	}
 
 
 
 	void FadeIn()
 	{
-		fade.CrossFadeAlpha(0, transitionSpeed, false);
+		fade.GetComponent<Image>().canvasRenderer.SetAlpha(1);
+		fade.GetComponent<Image>().CrossFadeAlpha(0, transitionSpeed, false);
+		fade.SetActive(false);
 		canSwitch = true;
+
+		if(!goingToPlay)
+			gameManager.StartPlayMode();
+
 	}
 
 	void FadeOut()
 	{
-		fade.CrossFadeAlpha(1, transitionSpeed, false);
-		
+		fade.SetActive(true);
+		fade.GetComponent<Image>().canvasRenderer.SetAlpha(0);
+		fade.GetComponent<Image>().CrossFadeAlpha(1, transitionSpeed, false);
+
 	}
 
 	public void Fade()
@@ -47,6 +51,7 @@ public class CamBehavior : MonoBehaviour
 		if (canSwitch)
 		{
 			canSwitch = false;
+			
 			FadeOut();
 			Invoke("SwitchCamera", transitionSpeed);
 			Invoke("FadeIn", transitionSpeed);
@@ -65,7 +70,6 @@ public class CamBehavior : MonoBehaviour
 		}
 		else
 		{
-
 			playCam.SetActive(false);
 			tacticCam.SetActive(true);
 			goingToPlay = true;

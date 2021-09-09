@@ -1,20 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class GameManager : MonoBehaviour
-{    
-    [SerializeField] int   length = 20;
-    [SerializeField] int   height = 14;
+{
+    [SerializeField] int length = 20;
+    [SerializeField] int height = 14;
     [SerializeField] float speed = 10;
-    [SerializeField] int   touchDownLength = 0;
-    [SerializeField] int   nbOfPointsToWin = 0;
+    [SerializeField] int touchDownLength = 0;
+    [SerializeField] int nbOfPointsToWin = 0;
     [SerializeField] GameObject winScreen = null;
     [SerializeField] GameObject loseScreen = null;
 
 
-
-
+    [SerializeField] Transform initialOffset = null;
     [SerializeField] Camera cam = null;
     [SerializeField] GameObject map = null;
     [SerializeField] GameObject highlightTileParent = null;
@@ -35,9 +35,22 @@ public class GameManager : MonoBehaviour
     uint scoreEnemies = 0;
 
 
+    [SerializeField] public GameObject characterCard = null;
     [SerializeField] GameObject ball = null;
+    [SerializeField] Transform ballPlaymode = null;
     Vector3 ballinitialPos = Vector3.zero;
     Vector3 ballDestination = Vector3.zero;
+
+
+    [SerializeField] GameObject pauseMenu = null;
+    private bool isInPause = false;
+
+
+    // sound var
+    [SerializeField] string comfirmMovementSound = "";
+    [SerializeField] string passSound = "";
+
+    [SerializeField] CamBehavior camBehavior = null;
 
 
     // Start is called before the first frame update
@@ -60,33 +73,52 @@ public class GameManager : MonoBehaviour
             PlayMode();
         else
             TacticalMode();
+
+
+
+
+
     }
 
 
     void PlayMode()
     {
+        ResolveCharacterColision();
         MoveCharacters();
         MoveBall();
+        
+        //check if reach touchdown for ball reception while in touchdown zone
+        foreach (GameObject character in allCharacters)
+            if (character.GetComponent<Character>().hasBall)
+                if (HasReachTouchDown(character))
+                    TouchDown(character);
 
         if (!isThereStillWaypoints() && (!ball.activeSelf || ballDestination == ball.transform.position))
             QuitPlayMode();
     }
     void TacticalMode()
     {
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        if(!camBehavior.isInSwitch)
         {
-            ClearHighlightTiles();
-            StartPlayMode();
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+                PauseMenu();
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                ClearHighlightTiles();
+                camBehavior.isInSwitch = true;
+                Debug.Log("INPUT");
+                camBehavior.Fade();
+            }
+
+            if (Input.GetMouseButtonDown(0))
+                OnLeftClick();
+            if (Input.GetMouseButtonDown(1))
+                OnRightClick();
+            if (Input.GetMouseButtonDown(2))
+                OnMiddleClick();
         }
-
-
-        if (Input.GetMouseButtonDown(0))
-            OnLeftClick();
-        if (Input.GetMouseButtonDown(1))
-            OnRightClick();
-        if (Input.GetMouseButtonDown(2))
-            OnMiddleClick();
 
     }
 
@@ -94,17 +126,20 @@ public class GameManager : MonoBehaviour
 
 
     //Playmode
-    void StartPlayMode()
+    public void StartPlayMode()
     {
         inPlayMode = true;
         SetAIWaypoints();
+        if (ball.activeSelf && ball.transform.position != ballDestination)
+            RuntimeManager.PlayOneShot(passSound);
+
     }
     GameObject GetClosestCharacterToTile(List<GameObject> characters, int tileIndex)
     {
         GameObject toReturn = null;
         int offsetMax = int.MaxValue;
 
-        foreach(GameObject character in characters)
+        foreach (GameObject character in characters)
         {
             int possibleNewOffset = GetOffsetAllBetweenTiles(GetTile(character.transform.position.x, character.transform.position.y), tileIndex);
 
@@ -198,50 +233,103 @@ public class GameManager : MonoBehaviour
 
 
     }
-    void MoveCharacters()
+    void ResolveCharacterColision()
     {
         List<int> tempAllTilesIndex = new List<int>();
 
-        //Check if two character want to access same tile
+        //Check if two character want to access same tile or a character want to move to a tile of a static character
         foreach (GameObject character in allCharacters)
-        { 
-            Character characterScript = character.GetComponent<Character>();
-            int tileIndex = 0;
+        {
+            Character currentCharacterScript = character.GetComponent<Character>();
+            int currentCharacterTile = 0;
+            bool currentCharacterIsStatic = false;
 
-            //if character static
-            if (characterScript.queueTileIndex.Count == 0)
-                tileIndex = GetTile(character.transform.position.x, character.transform.position.y);
-            //get next waypoint
-            else
-                tileIndex = characterScript.queueTileIndex[0];
-
-
-            if (tempAllTilesIndex.Contains(tileIndex))
+            //get reference tile
+            if (currentCharacterScript.queueTileIndex.Count == 0)
             {
-                //Remove all remaining Mvt
-                allCharacters[tempAllTilesIndex.IndexOf(tileIndex)].GetComponent<Character>().queueTileIndex.Clear();
-                characterScript.queueTileIndex.Clear();
-
-                //if someone has ball and the other is stronger, he get the ball
+                currentCharacterIsStatic = true;
+                currentCharacterTile = GetTile(character.transform.position.x, character.transform.position.y);
             }
             else
-                tempAllTilesIndex.Add(tileIndex);
+                currentCharacterTile = currentCharacterScript.queueTileIndex[0];
+
+
+            if (tempAllTilesIndex.Contains(currentCharacterTile))
+            {
+                Character otherCharacterScript = allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)].GetComponent<Character>();
+
+                //resolve colision
+                {
+                    //current is static so other stop path
+                    if (currentCharacterIsStatic) 
+                    {
+                        ClearPath(allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)]);
+                        RuntimeManager.PlayOneShot(otherCharacterScript.blocSound);
+                    }
+                    //other is static so current stop path
+                    else if (otherCharacterScript.queueTileIndex.Count == 0)
+                    {
+                        ClearPath(character);
+                        RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
+                    }
+                    //if current is stronger he get the tile
+                    else if (currentCharacterScript.strength > otherCharacterScript.strength) 
+                    {
+                        ClearPathAfterFirst(currentCharacterScript);
+                        ClearPath(allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)]);
+                        RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
+                    }
+                    //if other is stronger he get the tile
+                    else // other
+                    {
+                        ClearPathAfterFirst(otherCharacterScript);
+                        ClearPath(character);
+                        RuntimeManager.PlayOneShot(otherCharacterScript.blocSound);
+                    }
+                }
+
+                //resolve ball
+                if (currentCharacterScript.hasBall || otherCharacterScript.hasBall)
+                {
+                    bool isCurrentStronger = false;
+
+                    if (currentCharacterScript.strength > otherCharacterScript.strength)
+                        isCurrentStronger = true;
+                    else
+                        isCurrentStronger = false;
+
+                    currentCharacterScript.hasBall = isCurrentStronger;
+                    currentCharacterScript.ballIcon.SetActive(isCurrentStronger);
+                    otherCharacterScript.hasBall = !isCurrentStronger;
+                    otherCharacterScript.ballIcon.SetActive(!isCurrentStronger);
+                }
+                
+            }
+
+            tempAllTilesIndex.Add(currentCharacterTile);
 
         }
+    }
+    void MoveCharacters()
+    { 
 
-
-        //Apply Mvt
         foreach (GameObject character in allCharacters)
         {
             Character characterScript = character.GetComponent<Character>();
 
             if (characterScript.queueTileIndex.Count > 0)
             {
+                //Apply Mvt to Tactical
                 Vector2 tilePos = GetPosFromTile(characterScript.queueTileIndex[0]);
                 Vector3 direction = new Vector3(tilePos.x, tilePos.y, character.transform.position.z) - character.transform.position;
-
-
                 character.transform.position += direction.normalized * (speed * Time.deltaTime);
+
+                //Apply Mvt to Playmode 
+                if (characterScript.charactePlaymode != null)
+                {
+                    Vector3 directionPlaymode = new Vector3(direction.x, direction.z, direction.y);
+                    characterScript.charactePlaymode.position += directionPlaymode.normalized * (speed * Time.deltaTime);
+                }
 
                 //if you pass the waypoint remove it
                 if (Vector3.Dot(direction, new Vector3(tilePos.x, tilePos.y, character.transform.position.z) - character.transform.position) < 0)
@@ -263,8 +351,17 @@ public class GameManager : MonoBehaviour
     {
         if (ball.activeSelf && ballDestination != ball.transform.position)
         {
+            //Apply to Tactical
             Vector3 direction = ballDestination - ball.transform.position;
             ball.transform.position += direction.normalized * (speed * Time.deltaTime);
+
+            //Apply Mvt to Playmode 
+            if (ballPlaymode != null)
+            {
+                Vector3 directionPlaymode = new Vector3(direction.x, direction.z, direction.y);
+                ballPlaymode.position += directionPlaymode.normalized * (speed * Time.deltaTime);
+            }
+
 
             //if you pass the waypoint remove it
             if (Vector3.Dot(direction, ballDestination - ball.transform.position) < 0)
@@ -283,10 +380,14 @@ public class GameManager : MonoBehaviour
     }
     void QuitPlayMode()
     {
-        inPlayMode = false;
-
         foreach (GameObject character in allCharacters)
             character.GetComponent<Character>().canPickUpBall = true;
+
+        Debug.Log("Quit");
+        camBehavior.Fade();
+        camBehavior.isInSwitch = false;
+        inPlayMode = false;
+
     }
     //TacticalMode
     void OnLeftClick()
@@ -297,10 +398,16 @@ public class GameManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
+            Debug.Log(hit.transform.name);
+
             //select Allies
             if (hit.transform.CompareTag("Allies"))
             {
                 Character characterScript = hit.transform.GetComponent<Character>();
+                RuntimeManager.PlayOneShot(characterScript.cardSound);
+
+                characterCard.SetActive(true);
+                characterCard.GetComponent<Renderer>().material = characterScript.characterCardMat;
 
                 //if not throwing already
                 if (characterScript.canPickUpBall)
@@ -310,11 +417,17 @@ public class GameManager : MonoBehaviour
                     selectedEntityTryToMove = true;
                     GenerateHighlightTiles(characterScript.queueTileIndex.Count == 0 ? GetTile(hit.point.x, hit.point.y) : characterScript.queueTileIndex[characterScript.queueTileIndex.Count - 1], characterScript.mvt - characterScript.queueTileIndex.Count, Color.blue);
                 }
+
             }
             //select Enemies
             else if (hit.transform.CompareTag("Enemies"))
             {
-                GenerateHighlightTiles(GetTile(hit.point.x, hit.point.y), hit.transform.GetComponent<Character>().mvt, Color.red);
+                Character characterScript = hit.transform.GetComponent<Character>();
+                RuntimeManager.PlayOneShot(characterScript.cardSound);
+                GenerateHighlightTiles(GetTile(hit.point.x, hit.point.y), characterScript.mvt, Color.red);
+                characterCard.SetActive(true);
+                characterCard.GetComponent<Renderer>().material = characterScript.characterCardMat;
+
                 selectedEntity = null;
             }
             //select a Tile
@@ -324,6 +437,8 @@ public class GameManager : MonoBehaviour
 
                 if (selectedEntity != null && indexHighlightTiles.Contains(tileIndex))
                 {
+                    RuntimeManager.PlayOneShot(comfirmMovementSound);
+
                     if (selectedEntityTryToMove)
                         TileSelectMove(selectedEntity, tileIndex);
                     else
@@ -331,6 +446,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
+                    characterCard.SetActive(false);
                     ClearHighlightTiles();
                     selectedEntity = null;
                 }
@@ -356,7 +472,10 @@ public class GameManager : MonoBehaviour
                     CancelThrow(characterScript);
                 //cancel Mvt
                 else
-                    ClearTrailPath(hit.transform.gameObject);
+                {
+                    ClearPath(hit.transform.gameObject);
+                    selectedEntity = null;
+                }
             }
         }
 
@@ -452,12 +571,16 @@ public class GameManager : MonoBehaviour
     //Tiles
     int GetTile(float x, float y)
     {
+        x -= initialOffset.position.x;
+        y -= initialOffset.position.y;
+
         return Mathf.RoundToInt(x + 0.5f * (length - 1)) + Mathf.RoundToInt(y + 0.5f * (height - 1)) * length;
     }
     Vector2 GetPosFromTile(int tileIndex)
     {
         return new Vector2(-0.5f * (length - 1) + tileIndex % length,
-                           -0.5f * (height - 1) + (int)(tileIndex / length));
+                           -0.5f * (height - 1) + (int)(tileIndex / length))
+             + new Vector2(initialOffset.position.x, initialOffset.position.y);
     }
     int GetOffsetAllBetweenTiles(int tileReference, int tile2) { return Mathf.Abs(GetOffsetXBetweenTiles(tileReference, tile2)) + Mathf.Abs(GetOffsetYBetweenTiles(tileReference, tile2)); }
     int GetOffsetXBetweenTiles(int tileReference, int tile2) { return tile2 % length - tileReference % length;  }
@@ -474,11 +597,11 @@ public class GameManager : MonoBehaviour
 
         for (int i = 1; i < Mathf.Abs(offsetY) + 1; ++i)
         {
-            characterScript.queueTileIndex.Add(tileReference + length * ((offsetY > 0) ? i : -i));
-
             //security so enemies cant exceed their Mvt stat
-            if (characterScript.queueTileIndex.Count == characterScript.mvt)
+            if (characterScript.queueTileIndex.Count >= characterScript.mvt)
                 return;
+
+            characterScript.queueTileIndex.Add(tileReference + length * ((offsetY > 0) ? i : -i));
         }
 
         //Reset reference tile because tiles maybe have been add
@@ -486,11 +609,11 @@ public class GameManager : MonoBehaviour
 
         for (int i = 1; i < Mathf.Abs(offsetX) + 1; ++i)
         {
-            characterScript.queueTileIndex.Add(tileReference + ((offsetX > 0) ? i : -i));
-
             //security so enemies cant exceed their Mvt stat
-            if (characterScript.queueTileIndex.Count == characterScript.mvt)
+            if (characterScript.queueTileIndex.Count >= characterScript.mvt)
                 return;
+
+            characterScript.queueTileIndex.Add(tileReference + ((offsetX > 0) ? i : -i));
         }
     
     }
@@ -549,21 +672,30 @@ public class GameManager : MonoBehaviour
         }
 
     }
-    void ClearTrailPath(GameObject character)
+    void ClearPath(GameObject character)
     {
         Character characterScript = character.GetComponent<Character>();
-        LineRenderer lr = character.GetComponent<LineRenderer>();
-
         characterScript.queueTileIndex.Clear();
-        lr.positionCount = 0;
 
-        selectedEntity = null;
+        LineRenderer lr = character.GetComponent<LineRenderer>();
+        if (lr != null)
+            lr.positionCount = 0;
+
+    }
+    void ClearPathAfterFirst(Character characterScript)
+    {
+        characterScript.queueTileIndex.RemoveRange(1, characterScript.queueTileIndex.Count - 1);
+
+        LineRenderer lr = characterScript.gameObject.GetComponent<LineRenderer>();
+        if (lr != null)
+            lr.positionCount = 1;
+
     }
     //TouchDown
     bool HasReachTouchDown(GameObject character)
     {
         Character characterScript = character.GetComponent<Character>();
-        float tileXValue = characterScript.queueTileIndex[0] % length;
+        float tileXValue = GetTile(character.transform.position.x, character.transform.position.y) % length;
 
         if ((tileXValue < touchDownLength && character.CompareTag("Enemies")) ||
             (tileXValue >= length - touchDownLength && character.CompareTag("Allies")) )
@@ -597,17 +729,32 @@ public class GameManager : MonoBehaviour
             foreach (GameObject chara in allCharacters)
             {
                 Character charaScript = chara.GetComponent<Character>();
-                ClearTrailPath(chara);
+                ClearPath(chara);
                 charaScript.queueTileIndex.Clear();
                 chara.transform.position = charaScript.initialPos;
             }
 
-            ball.transform.position = ballinitialPos;
+            ball.transform.position = ballinitialPos + new Vector3(character.CompareTag("Allies")? 1 : -1, 0, 0);
             ballDestination = ball.transform.position;
             ball.SetActive(true);
         }
 
     }
+
+    public void PauseMenu()
+	{
+        if (!isInPause)
+		{
+            pauseMenu.SetActive(true);
+            isInPause = true;
+		}
+        else
+		{
+            pauseMenu.SetActive(false);
+            isInPause = false;
+        }
+            
+	}
 
 
 }
