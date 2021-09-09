@@ -3,15 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
 
-/*
-struct Stats
-{
-   float mvt;
-   float strength;
-   float range;
-   float precision;
-   float catchUp;
-}*/
 
 public class Character : MonoBehaviour
 {
@@ -21,12 +12,14 @@ public class Character : MonoBehaviour
 
 
     [SerializeField] public Transform charactePlaymode = null;
+
     [SerializeField] public GameObject ballIcon = null;
     public bool hasBall = false;
     public bool canPickUpBall = true;
-    [SerializeField] GameObject characterCard = null;
-    [SerializeField] float timeToShowCard = 1;
-    float currentTimeToShowCard = 0;
+
+    [SerializeField] public GameObject characterCard        = null;
+    [SerializeField] public Texture    characterCardTexture = null;
+
 
     public Vector3 initialPos;
     public List<int> queueTileIndex = new List<int>();
@@ -61,17 +54,4 @@ public class Character : MonoBehaviour
     }
 
 
-    private void OnMouseOver()
-    {
-        currentTimeToShowCard += Time.deltaTime;
-
-        if(currentTimeToShowCard >= timeToShowCard)
-            characterCard.SetActive(true);
-    }
-
-    private void OnMouseExit()
-    {
-        currentTimeToShowCard = 0;
-        characterCard.SetActive(false);
-    }
 }

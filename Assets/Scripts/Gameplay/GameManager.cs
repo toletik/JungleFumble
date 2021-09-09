@@ -82,11 +82,17 @@ public class GameManager : MonoBehaviour
 
     void PlayMode()
     {
-        CheckCharactersColision();
+        ResolveCharacterColision();
         MoveCharacters();
         MoveBall();
+        
+        //check if reach touchdown for ball reception while in touchdown zone
+        foreach (GameObject character in allCharacters)
+            if (character.GetComponent<Character>().hasBall)
+                if (HasReachTouchDown(character))
+                    TouchDown(character);
 
-        if (!isThereStillWaypoints() && (!ball.activeSelf || ballDestination == ball.transform.position))
+                if (!isThereStillWaypoints() && (!ball.activeSelf || ballDestination == ball.transform.position))
             QuitPlayMode();
     }
     void TacticalMode()
@@ -219,10 +225,8 @@ public class GameManager : MonoBehaviour
 
 
     }
-
-    void CheckCharactersColision()
+    void ResolveCharacterColision()
     {
-
         List<int> tempAllTilesIndex = new List<int>();
 
         //Check if two character want to access same tile or a character want to move to a tile of a static character
@@ -388,6 +392,9 @@ public class GameManager : MonoBehaviour
                 Character characterScript = hit.transform.GetComponent<Character>();
                 RuntimeManager.PlayOneShot(characterScript.cardSound);
 
+                //characterScript.characterCard.SetActive(true);
+                //characterScript.characterCard.GetComponent<Renderer>().material.SetTexture("", characterScript.characterCardTexture);
+
                 //if not throwing already
                 if (characterScript.canPickUpBall)
                 {
@@ -413,7 +420,7 @@ public class GameManager : MonoBehaviour
 
                 if (selectedEntity != null && indexHighlightTiles.Contains(tileIndex))
                 {
-                    
+                    RuntimeManager.PlayOneShot(comfirmMovementSound);
 
                     if (selectedEntityTryToMove)
                         TileSelectMove(selectedEntity, tileIndex);
@@ -670,7 +677,7 @@ public class GameManager : MonoBehaviour
     bool HasReachTouchDown(GameObject character)
     {
         Character characterScript = character.GetComponent<Character>();
-        float tileXValue = characterScript.queueTileIndex[0] % length;
+        float tileXValue = GetTile(character.transform.position.x, character.transform.position.y) % length;
 
         if ((tileXValue < touchDownLength && character.CompareTag("Enemies")) ||
             (tileXValue >= length - touchDownLength && character.CompareTag("Allies")) )
