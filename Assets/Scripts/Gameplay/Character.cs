@@ -18,6 +18,8 @@ public class Character : MonoBehaviour
     [SerializeField] public int strength = 0;
     [SerializeField] public int range = 0;
 
+
+    [SerializeField] public Transform charactePlaymode = null;
     [SerializeField] public GameObject ballIcon = null;
     public bool hasBall = false;
     public bool canPickUpBall = true;

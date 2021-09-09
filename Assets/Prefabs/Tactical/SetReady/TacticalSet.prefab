@@ -341,7 +341,8 @@ MonoBehaviour:
   - {fileID: 2320229876030977083}
   - {fileID: 2320229874963728020}
   - {fileID: 2320229874226172179}
-  ball: {fileID: 0}
+  ball: {fileID: 63175644587508373}
+  pauseMenu: {fileID: 0}
 --- !u!1 &5506291277515921477
 GameObject:
   m_ObjectHideFlags: 0
@@ -472,5 +473,10 @@ GameObject:
 --- !u!1 &2320229874226172179 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7908844071825949616, guid: 3897192bc51644547a54403bb8fc1cb2, type: 3}
+  m_PrefabInstance: {fileID: 5616770491447759523}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &63175644587508373 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5553702403313471542, guid: 3897192bc51644547a54403bb8fc1cb2, type: 3}
   m_PrefabInstance: {fileID: 5616770491447759523}
   m_PrefabAsset: {fileID: 0}

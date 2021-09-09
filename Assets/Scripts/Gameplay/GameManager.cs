@@ -13,8 +13,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject loseScreen = null;
 
 
-
-
     [SerializeField] Transform initialOffset = null;
     [SerializeField] Camera cam = null;
     [SerializeField] GameObject map = null;
@@ -37,6 +35,7 @@ public class GameManager : MonoBehaviour
 
 
     [SerializeField] GameObject ball = null;
+    [SerializeField] Transform ballPlaymode = null;
     Vector3 ballinitialPos = Vector3.zero;
     Vector3 ballDestination = Vector3.zero;
 
@@ -248,11 +247,17 @@ public class GameManager : MonoBehaviour
 
             if (characterScript.queueTileIndex.Count > 0)
             {
+                //Apply Mvt to Tactical
                 Vector2 tilePos = GetPosFromTile(characterScript.queueTileIndex[0]);
                 Vector3 direction = new Vector3(tilePos.x, tilePos.y, character.transform.position.z) - character.transform.position;
-
-
                 character.transform.position += direction.normalized * (speed * Time.deltaTime);
+
+                //Apply Mvt to Playmode 
+                if (characterScript.charactePlaymode != null)
+                {
+                    Vector3 directionPlaymode = new Vector3(direction.x, direction.z, direction.y);
+                    characterScript.charactePlaymode.position += directionPlaymode.normalized * (speed * Time.deltaTime);
+                }
 
                 //if you pass the waypoint remove it
                 if (Vector3.Dot(direction, new Vector3(tilePos.x, tilePos.y, character.transform.position.z) - character.transform.position) < 0)
@@ -274,8 +279,17 @@ public class GameManager : MonoBehaviour
     {
         if (ball.activeSelf && ballDestination != ball.transform.position)
         {
+            //Apply to Tactical
             Vector3 direction = ballDestination - ball.transform.position;
             ball.transform.position += direction.normalized * (speed * Time.deltaTime);
+
+            //Apply Mvt to Playmode 
+            if (ballPlaymode != null)
+            {
+                Vector3 directionPlaymode = new Vector3(direction.x, direction.z, direction.y);
+                ballPlaymode.position += directionPlaymode.normalized * (speed * Time.deltaTime);
+            }
+
 
             //if you pass the waypoint remove it
             if (Vector3.Dot(direction, ballDestination - ball.transform.position) < 0)
