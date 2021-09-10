@@ -167,6 +167,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1036234627102092182, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+      propertyPath: onTouchDown
+      value: 
+      objectReference: {fileID: 781599898}
+    - target: {fileID: 1036234627102092182, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: ballPlaymode
       value: 
       objectReference: {fileID: 0}
@@ -228,7 +232,7 @@ PrefabInstance:
       objectReference: {fileID: 781599888}
     - target: {fileID: 3181248254992962269, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3181248254992962269, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -483,6 +487,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3234227308843228108, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
   m_PrefabInstance: {fileID: 781599885}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &781599898 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6581712954105422689, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
+  m_PrefabInstance: {fileID: 781599885}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &781599906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -561,7 +570,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1330525153 stripped
 GameObject:

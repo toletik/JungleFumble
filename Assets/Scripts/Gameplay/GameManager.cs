@@ -57,6 +57,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject enemyScoreText = null;
 
 
+    [SerializeField] GameObject onTouchDown = null;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -728,6 +730,8 @@ public class GameManager : MonoBehaviour
     }
     void TouchDown(GameObject character)
     {
+        onTouchDown.SetActive(true);
+
         //update score
         if (character.CompareTag("Allies"))
 		{

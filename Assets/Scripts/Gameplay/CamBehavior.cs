@@ -59,9 +59,9 @@ public class CamBehavior : MonoBehaviour
 
 
 			if (goingToPlay)
-				fade.GetComponent<Image>().sprite = matGoToPlaymode;
-			else
 				fade.GetComponent<Image>().sprite = matGoToTactical;
+			else
+				fade.GetComponent<Image>().sprite = matGoToPlaymode;
 
 
 			Invoke("SwitchCamera", transitionSpeed);
