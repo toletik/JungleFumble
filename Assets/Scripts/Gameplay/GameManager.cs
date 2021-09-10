@@ -744,9 +744,15 @@ public class GameManager : MonoBehaviour
 
         //Finish or reset pos
         if (scoreAllies >= nbOfPointsToWin)
+        {
             winScreen.SetActive(true);
+            cam.gameObject.SetActive(false);
+        }
         else if (scoreEnemies >= nbOfPointsToWin)
+        {
             loseScreen.SetActive(true);
+            cam.gameObject.SetActive(false);
+        }
         else
         {
             QuitPlayMode();
