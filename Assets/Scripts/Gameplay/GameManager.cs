@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
 
     [SerializeField] Transform initialOffset = null;
+    [SerializeField] Transform initialOffsetPlaymode = null;
     [SerializeField] Camera cam = null;
     [SerializeField] GameObject map = null;
     [SerializeField] GameObject highlightTileParent = null;
@@ -35,9 +36,9 @@ public class GameManager : MonoBehaviour
     uint scoreEnemies = 0;
 
 
-    [SerializeField] public GameObject characterCard = null;
+    [SerializeField] GameObject characterCard = null;
     [SerializeField] GameObject ball = null;
-    [SerializeField] Transform ballPlaymode = null;
+    Transform ballPlaymode = null;
     Vector3 ballinitialPos = Vector3.zero;
     Vector3 ballDestination = Vector3.zero;
 
@@ -52,18 +53,28 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] CamBehavior camBehavior = null;
 
+    [SerializeField] GameObject alliesScoreText = null;
+    [SerializeField] GameObject enemyScoreText = null;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        ballinitialPos = ball.transform.position;
-        ballDestination = ball.transform.position;
         map.transform.localScale = new Vector3(length, height, 1);
+        GenerateGrid();
+
         foreach (GameObject character in allies)
             allCharacters.Add(character);
         foreach (GameObject character in enemies)
             allCharacters.Add(character);
-        GenerateGrid();
+
+        ResetPositionCharacterPlaymode();
+
+        ballinitialPos = ball.transform.position;
+        ballDestination = ball.transform.position;
+        ballPlaymode = ball.GetComponent<Ball>().ballPlaymode;
+        SetPositionBallPlaymode();
+
     }
 
     // Update is called once per frame
@@ -107,8 +118,8 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 ClearHighlightTiles();
+                characterCard.SetActive(false);
                 camBehavior.isInSwitch = true;
-                Debug.Log("INPUT");
                 camBehavior.Fade();
             }
 
@@ -123,9 +134,19 @@ public class GameManager : MonoBehaviour
     }
 
 
-
-
     //Playmode
+    void ResetPositionCharacterPlaymode()
+    {
+        foreach (GameObject character in allCharacters)
+        {
+            Character characterScript = character.GetComponent<Character>();
+            characterScript.charactePlaymode.position = new Vector3(character.transform.localPosition.x + initialOffsetPlaymode.position.x, characterScript.charactePlaymode.position.y, character.transform.localPosition.y + initialOffsetPlaymode.position.z);
+        }
+    }
+    void SetPositionBallPlaymode()
+    {
+        ballPlaymode.position = new Vector3(ball.transform.localPosition.x + initialOffsetPlaymode.position.x, ballPlaymode.position.y, ball.transform.localPosition.y + initialOffsetPlaymode.position.z);
+    }
     public void StartPlayMode()
     {
         inPlayMode = true;
@@ -636,7 +657,9 @@ public class GameManager : MonoBehaviour
         characterScript.canPickUpBall = false;
 
         ball.SetActive(true);
+        ballPlaymode.gameObject.SetActive(true);
         ball.transform.position = new Vector3(selectedEntity.transform.position.x, selectedEntity.transform.position.y, ballinitialPos.z);
+        SetPositionBallPlaymode();
         LineRenderer ballLR = ball.GetComponent<LineRenderer>();
         ballLR.positionCount = 2;
         ballLR.SetPosition(0, ball.transform.position);
@@ -652,6 +675,7 @@ public class GameManager : MonoBehaviour
         characterScript.canPickUpBall = true;
 
         ball.SetActive(false);
+        ballPlaymode.gameObject.SetActive(false);
         ball.GetComponent<LineRenderer>().positionCount = 0;
     }
     //Trail
@@ -707,9 +731,16 @@ public class GameManager : MonoBehaviour
     {
         //update score
         if (character.CompareTag("Allies"))
+		{
             scoreAllies++;
+            alliesScoreText.GetComponent<TextMesh>().text = scoreAllies.ToString();
+        }   
         else
+		{
             scoreEnemies++;
+            enemyScoreText.GetComponent<TextMesh>().text = scoreEnemies.ToString();
+        }
+            
 
 
         //Finish or reset pos
@@ -733,10 +764,13 @@ public class GameManager : MonoBehaviour
                 charaScript.queueTileIndex.Clear();
                 chara.transform.position = charaScript.initialPos;
             }
+            ResetPositionCharacterPlaymode();
 
             ball.transform.position = ballinitialPos + new Vector3(character.CompareTag("Allies")? 1 : -1, 0, 0);
             ballDestination = ball.transform.position;
             ball.SetActive(true);
+            ballPlaymode.gameObject.SetActive(true);
+            SetPositionBallPlaymode();
         }
 
     }

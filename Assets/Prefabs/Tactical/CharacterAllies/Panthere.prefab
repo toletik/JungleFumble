@@ -214,7 +214,7 @@ MonoBehaviour:
   ballIcon: {fileID: 3537322847744935316}
   hasBall: 0
   canPickUpBall: 1
-  characterCardTexture: {fileID: 0}
+  characterCardMat: {fileID: 2100000, guid: d44245cd0fb284c4689f69cc3dcb8325, type: 2}
   initialPos: {x: 0, y: 0, z: 0}
   queueTileIndex: 
   blocSound: event:/Actions/Blocage/panther_bloc
@@ -229,34 +229,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
       propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.35
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.168
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}

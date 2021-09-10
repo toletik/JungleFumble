@@ -214,11 +214,12 @@ MonoBehaviour:
   ballIcon: {fileID: 1529955701136796660}
   hasBall: 0
   canPickUpBall: 1
-  characterCardTexture: {fileID: 0}
+  characterCardMat: {fileID: 2100000, guid: dcf616ab133c4ce48949973df5648382, type: 2}
   initialPos: {x: 0, y: 0, z: 0}
   queueTileIndex: 
   blocSound: event:/Actions/Blocage/rhino_bloc
   catchSound: "event:/Actions/R\xE9ception/rhino_catch"
+  cardSound: 
 --- !u!1001 &9043340665159402730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -228,34 +229,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
       propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.35
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.168
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
-      propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6895602116102954480, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
@@ -273,6 +246,10 @@ PrefabInstance:
     - target: {fileID: 7546653025867951902, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
       propertyPath: m_Name
       value: BallIcon
+      objectReference: {fileID: 0}
+    - target: {fileID: 7546653025867951902, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f161ed93f7d76ba4983d264ea8c0de62, type: 3}
