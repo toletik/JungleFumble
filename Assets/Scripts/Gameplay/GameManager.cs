@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] GameObject characterCard = null;
     [SerializeField] GameObject ball = null;
-    [SerializeField] Transform ballPlaymode = null;
+    Transform ballPlaymode = null;
     Vector3 ballinitialPos = Vector3.zero;
     Vector3 ballDestination = Vector3.zero;
 
@@ -72,6 +72,8 @@ public class GameManager : MonoBehaviour
 
         ballinitialPos = ball.transform.position;
         ballDestination = ball.transform.position;
+        ballPlaymode = ball.GetComponent<Ball>().ballPlaymode;
+        SetPositionBallPlaymode();
 
     }
 
@@ -140,6 +142,10 @@ public class GameManager : MonoBehaviour
             Character characterScript = character.GetComponent<Character>();
             characterScript.charactePlaymode.position = new Vector3(character.transform.localPosition.x + initialOffsetPlaymode.position.x, characterScript.charactePlaymode.position.y, character.transform.localPosition.y + initialOffsetPlaymode.position.z);
         }
+    }
+    void SetPositionBallPlaymode()
+    {
+        ballPlaymode.position = new Vector3(ball.transform.localPosition.x + initialOffsetPlaymode.position.x, ballPlaymode.position.y, ball.transform.localPosition.y + initialOffsetPlaymode.position.z);
     }
     //Playmode
     public void StartPlayMode()
@@ -652,7 +658,9 @@ public class GameManager : MonoBehaviour
         characterScript.canPickUpBall = false;
 
         ball.SetActive(true);
+        ballPlaymode.gameObject.SetActive(true);
         ball.transform.position = new Vector3(selectedEntity.transform.position.x, selectedEntity.transform.position.y, ballinitialPos.z);
+        SetPositionBallPlaymode();
         LineRenderer ballLR = ball.GetComponent<LineRenderer>();
         ballLR.positionCount = 2;
         ballLR.SetPosition(0, ball.transform.position);
@@ -668,6 +676,7 @@ public class GameManager : MonoBehaviour
         characterScript.canPickUpBall = true;
 
         ball.SetActive(false);
+        ballPlaymode.gameObject.SetActive(false);
         ball.GetComponent<LineRenderer>().positionCount = 0;
     }
     //Trail
@@ -761,6 +770,8 @@ public class GameManager : MonoBehaviour
             ball.transform.position = ballinitialPos + new Vector3(character.CompareTag("Allies")? 1 : -1, 0, 0);
             ballDestination = ball.transform.position;
             ball.SetActive(true);
+            ballPlaymode.gameObject.SetActive(true);
+            SetPositionBallPlaymode();
         }
 
     }

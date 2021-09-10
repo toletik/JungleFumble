@@ -48,6 +48,7 @@ public class Character : MonoBehaviour
             ballIcon.SetActive(true);
             other.GetComponent<LineRenderer>().positionCount = 0;
             other.gameObject.SetActive(false);
+            other.gameObject.GetComponent<Ball>().ballPlaymode.gameObject.SetActive(false);
             RuntimeManager.PlayOneShot(catchSound);
         }
     }
