@@ -127,6 +127,8 @@ MonoBehaviour:
   tacticCam: {fileID: 0}
   playCam: {fileID: 0}
   fade: {fileID: 0}
+  matGoToPlaymode: {fileID: 21300000, guid: f097e753d75027347b879fbb4c7228b0, type: 3}
+  matGoToTactical: {fileID: 21300000, guid: c2741a70f5e2e004db64208c24ad5bcf, type: 3}
   transitionSpeed: 2
   isInSwitch: 0
   gameManager: {fileID: 3723960987663866541}
@@ -442,6 +444,22 @@ PrefabInstance:
     - target: {fileID: 3488754683090413260, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3488754683260175074, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3488754683260175074, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3488754683260175074, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3488754683260175074, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3488754683260175077, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
       propertyPath: m_IsActive

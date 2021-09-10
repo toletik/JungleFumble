@@ -138,6 +138,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 57913985871063580, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c2741a70f5e2e004db64208c24ad5bcf, type: 3}
     - target: {fileID: 57913987448587505, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -290,6 +294,14 @@ PrefabInstance:
       propertyPath: playCam
       value: 
       objectReference: {fileID: 781599894}
+    - target: {fileID: 8589470887391363965, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+      propertyPath: matGoToPlaymode
+      value: 
+      objectReference: {fileID: 21300000, guid: c2741a70f5e2e004db64208c24ad5bcf, type: 3}
+    - target: {fileID: 8589470887391363965, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
+      propertyPath: matGoToTactical
+      value: 
+      objectReference: {fileID: 21300000, guid: f097e753d75027347b879fbb4c7228b0, type: 3}
     m_RemovedComponents:
     - {fileID: 5506291277120854109, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
