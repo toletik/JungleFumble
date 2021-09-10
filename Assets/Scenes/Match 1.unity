@@ -173,7 +173,7 @@ PrefabInstance:
     - target: {fileID: 1036234627102092182, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: alliesScoreText
       value: 
-      objectReference: {fileID: 781599895}
+      objectReference: {fileID: 781599897}
     - target: {fileID: 1036234627102092182, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: initialOffsetPlaymode
       value: 
@@ -285,7 +285,7 @@ PrefabInstance:
     - target: {fileID: 7457524836861890611, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: ballPlaymode
       value: 
-      objectReference: {fileID: 781599897}
+      objectReference: {fileID: 781599895}
     - target: {fileID: 8589470887391363965, guid: 36b0cc1eb7fbb7647b21b7909d5ab79a, type: 3}
       propertyPath: playCam
       value: 
@@ -456,19 +456,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3988403647481715261, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
   m_PrefabInstance: {fileID: 781599885}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &781599895 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3677187660186123338, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
+--- !u!4 &781599895 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7676451980238674259, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
   m_PrefabInstance: {fileID: 781599885}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &781599896 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 4454284432344314768, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2934290680528550545, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
   m_PrefabInstance: {fileID: 781599885}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &781599897 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7939689070989457896, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
+--- !u!1 &781599897 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3234227308843228108, guid: f9c7343847da00c489669ef0e60c2f4e, type: 3}
   m_PrefabInstance: {fileID: 781599885}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &781599906
