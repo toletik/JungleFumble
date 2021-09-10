@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
 
     [SerializeField] Transform initialOffset = null;
+    [SerializeField] Transform initialOffsetPlaymode = null;
     [SerializeField] Camera cam = null;
     [SerializeField] GameObject map = null;
     [SerializeField] GameObject highlightTileParent = null;
@@ -35,9 +36,9 @@ public class GameManager : MonoBehaviour
     uint scoreEnemies = 0;
 
 
-    [SerializeField] public GameObject characterCard = null;
+    [SerializeField] GameObject characterCard = null;
     [SerializeField] GameObject ball = null;
-    [SerializeField] Transform ballPlaymode = null;
+    Transform ballPlaymode = null;
     Vector3 ballinitialPos = Vector3.zero;
     Vector3 ballDestination = Vector3.zero;
 
@@ -52,18 +53,28 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] CamBehavior camBehavior = null;
 
+    [SerializeField] GameObject alliesScoreText = null;
+    [SerializeField] GameObject enemyScoreText = null;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        ballinitialPos = ball.transform.position;
-        ballDestination = ball.transform.position;
         map.transform.localScale = new Vector3(length, height, 1);
+        GenerateGrid();
+
         foreach (GameObject character in allies)
             allCharacters.Add(character);
         foreach (GameObject character in enemies)
             allCharacters.Add(character);
-        GenerateGrid();
+
+        ResetPositionCharacterPlaymode();
+
+        ballinitialPos = ball.transform.position;
+        ballDestination = ball.transform.position;
+        ballPlaymode = ball.GetComponent<Ball>().ballPlaymode;
+        SetPositionBallPlaymode();
+
     }
 
     // Update is called once per frame
@@ -107,8 +118,8 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 ClearHighlightTiles();
+                characterCard.SetActive(false);
                 camBehavior.isInSwitch = true;
-                Debug.Log("INPUT");
                 camBehavior.Fade();
             }
 
@@ -123,9 +134,19 @@ public class GameManager : MonoBehaviour
     }
 
 
-
-
     //Playmode
+    void ResetPositionCharacterPlaymode()
+    {
+        foreach (GameObject character in allCharacters)
+        {
+            Character characterScript = character.GetComponent<Character>();
+            characterScript.charactePlaymode.position = new Vector3(character.transform.localPosition.x + initialOffsetPlaymode.position.x, characterScript.charactePlaymode.position.y, character.transform.localPosition.y + initialOffsetPlaymode.position.z);
+        }
+    }
+    void SetPositionBallPlaymode()
+    {
+        ballPlaymode.position = new Vector3(ball.transform.localPosition.x + initialOffsetPlaymode.position.x, ballPlaymode.position.y, ball.transform.localPosition.y + initialOffsetPlaymode.position.z);
+    }
     public void StartPlayMode()
     {
         inPlayMode = true;
@@ -235,79 +256,78 @@ public class GameManager : MonoBehaviour
     }
     void ResolveCharacterColision()
     {
-        List<int> tempAllTilesIndex = new List<int>();
+        List<int> tempAllCurrentTilesIndex = new List<int>();
+        List<int> tempAllNextTilesIndex    = new List<int>();
 
         //Check if two character want to access same tile or a character want to move to a tile of a static character
         foreach (GameObject character in allCharacters)
         {
             Character currentCharacterScript = character.GetComponent<Character>();
-            int currentCharacterTile = 0;
-            bool currentCharacterIsStatic = false;
+            int currentCharacterCurrentTile = GetTile(character.transform.position.x, character.transform.position.y);
+            int currentCharacterNextTile = (currentCharacterScript.queueTileIndex.Count == 0)? GetTile(character.transform.position.x, character.transform.position.y) : currentCharacterScript.queueTileIndex[0];
 
-            //get reference tile
-            if (currentCharacterScript.queueTileIndex.Count == 0)
+
+            //they go to each other tiles
+            if (tempAllCurrentTilesIndex.Contains(currentCharacterNextTile) && tempAllNextTilesIndex[tempAllCurrentTilesIndex.IndexOf(currentCharacterNextTile)] == currentCharacterCurrentTile)
             {
-                currentCharacterIsStatic = true;
-                currentCharacterTile = GetTile(character.transform.position.x, character.transform.position.y);
+                ClearPath(character);
+                ClearPath(allCharacters[tempAllCurrentTilesIndex.IndexOf(currentCharacterNextTile)]);
+                ResolveTakeBall(currentCharacterScript, allCharacters[tempAllCurrentTilesIndex.IndexOf(currentCharacterNextTile)].GetComponent<Character>());
             }
-            else
-                currentCharacterTile = currentCharacterScript.queueTileIndex[0];
-
-
-            if (tempAllTilesIndex.Contains(currentCharacterTile))
+            //current try to go to other and other is static
+            else if (tempAllCurrentTilesIndex.Contains(currentCharacterNextTile) && tempAllNextTilesIndex[tempAllCurrentTilesIndex.IndexOf(currentCharacterNextTile)] == currentCharacterNextTile)
             {
-                Character otherCharacterScript = allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)].GetComponent<Character>();
+                ClearPath(character);
+                RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
+                ResolveTakeBall(currentCharacterScript, allCharacters[tempAllCurrentTilesIndex.IndexOf(currentCharacterNextTile)].GetComponent<Character>());
+            }
+            //current is static and other try to go to current
+            else if (tempAllNextTilesIndex.Contains(currentCharacterCurrentTile) && currentCharacterCurrentTile == currentCharacterNextTile)
+            {
+                ClearPath(allCharacters[tempAllNextTilesIndex.IndexOf(currentCharacterCurrentTile)]);
+                RuntimeManager.PlayOneShot(allCharacters[tempAllNextTilesIndex.IndexOf(currentCharacterCurrentTile)].GetComponent<Character>().blocSound);
+                ResolveTakeBall(currentCharacterScript, allCharacters[tempAllNextTilesIndex.IndexOf(currentCharacterCurrentTile)].GetComponent<Character>());
+            }
+            //current and other try to go to same tile
+            else if(tempAllNextTilesIndex.Contains(currentCharacterNextTile) )
+            {
+                GameObject otherCharacter = allCharacters[tempAllNextTilesIndex.IndexOf(currentCharacterNextTile)];
+                Character otherCharacterScript = otherCharacter.GetComponent<Character>();
 
-                //resolve colision
+                //if current is stronger he get the tile
+                if (currentCharacterScript.strength > otherCharacterScript.strength) 
                 {
-                    //current is static so other stop path
-                    if (currentCharacterIsStatic) 
-                    {
-                        ClearPath(allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)]);
-                        RuntimeManager.PlayOneShot(otherCharacterScript.blocSound);
-                    }
-                    //other is static so current stop path
-                    else if (otherCharacterScript.queueTileIndex.Count == 0)
-                    {
-                        ClearPath(character);
-                        RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
-                    }
-                    //if current is stronger he get the tile
-                    else if (currentCharacterScript.strength > otherCharacterScript.strength) 
-                    {
-                        ClearPathAfterFirst(currentCharacterScript);
-                        ClearPath(allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)]);
-                        RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
-                    }
-                    //if other is stronger he get the tile
-                    else // other
-                    {
-                        ClearPathAfterFirst(otherCharacterScript);
-                        ClearPath(character);
-                        RuntimeManager.PlayOneShot(otherCharacterScript.blocSound);
-                    }
+                    ClearPathAfterFirst(currentCharacterScript);
+                    ClearPath(otherCharacter);
+                    RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
+                }
+                //if other is stronger he get the tile
+                else
+                {
+                    ClearPathAfterFirst(otherCharacterScript);
+                    ClearPath(character);
+                    RuntimeManager.PlayOneShot(otherCharacterScript.blocSound);
                 }
 
-                //resolve ball
-                if (currentCharacterScript.hasBall || otherCharacterScript.hasBall)
-                {
-                    bool isCurrentStronger = false;
-
-                    if (currentCharacterScript.strength > otherCharacterScript.strength)
-                        isCurrentStronger = true;
-                    else
-                        isCurrentStronger = false;
-
-                    currentCharacterScript.hasBall = isCurrentStronger;
-                    currentCharacterScript.ballIcon.SetActive(isCurrentStronger);
-                    otherCharacterScript.hasBall = !isCurrentStronger;
-                    otherCharacterScript.ballIcon.SetActive(!isCurrentStronger);
-                }
-                
+                ResolveTakeBall(currentCharacterScript, otherCharacterScript);
             }
 
-            tempAllTilesIndex.Add(currentCharacterTile);
+                 
+            tempAllCurrentTilesIndex.Add(currentCharacterCurrentTile);
+            tempAllNextTilesIndex.Add(currentCharacterNextTile);
 
+        }
+    }
+    void ResolveTakeBall(Character currentCharacterScript, Character otherCharacterScript)
+    {
+        if (currentCharacterScript.hasBall || otherCharacterScript.hasBall)
+        {
+            bool isCurrentStronger = (currentCharacterScript.strength > otherCharacterScript.strength) ? true : false;
+
+            currentCharacterScript.hasBall = isCurrentStronger;
+            currentCharacterScript.ballIcon.SetActive(isCurrentStronger);
+            otherCharacterScript.hasBall = !isCurrentStronger;
+            otherCharacterScript.ballIcon.SetActive(!isCurrentStronger);
         }
     }
     void MoveCharacters()
@@ -636,7 +656,9 @@ public class GameManager : MonoBehaviour
         characterScript.canPickUpBall = false;
 
         ball.SetActive(true);
+        ballPlaymode.gameObject.SetActive(true);
         ball.transform.position = new Vector3(selectedEntity.transform.position.x, selectedEntity.transform.position.y, ballinitialPos.z);
+        SetPositionBallPlaymode();
         LineRenderer ballLR = ball.GetComponent<LineRenderer>();
         ballLR.positionCount = 2;
         ballLR.SetPosition(0, ball.transform.position);
@@ -652,6 +674,7 @@ public class GameManager : MonoBehaviour
         characterScript.canPickUpBall = true;
 
         ball.SetActive(false);
+        ballPlaymode.gameObject.SetActive(false);
         ball.GetComponent<LineRenderer>().positionCount = 0;
     }
     //Trail
@@ -707,16 +730,29 @@ public class GameManager : MonoBehaviour
     {
         //update score
         if (character.CompareTag("Allies"))
+		{
             scoreAllies++;
+            alliesScoreText.GetComponent<TextMesh>().text = scoreAllies.ToString();
+        }   
         else
+		{
             scoreEnemies++;
+            enemyScoreText.GetComponent<TextMesh>().text = scoreEnemies.ToString();
+        }
+            
 
 
         //Finish or reset pos
         if (scoreAllies >= nbOfPointsToWin)
+        {
             winScreen.SetActive(true);
+            cam.gameObject.SetActive(false);
+        }
         else if (scoreEnemies >= nbOfPointsToWin)
+        {
             loseScreen.SetActive(true);
+            cam.gameObject.SetActive(false);
+        }
         else
         {
             QuitPlayMode();
@@ -733,10 +769,13 @@ public class GameManager : MonoBehaviour
                 charaScript.queueTileIndex.Clear();
                 chara.transform.position = charaScript.initialPos;
             }
+            ResetPositionCharacterPlaymode();
 
             ball.transform.position = ballinitialPos + new Vector3(character.CompareTag("Allies")? 1 : -1, 0, 0);
             ballDestination = ball.transform.position;
             ball.SetActive(true);
+            ballPlaymode.gameObject.SetActive(true);
+            SetPositionBallPlaymode();
         }
 
     }
