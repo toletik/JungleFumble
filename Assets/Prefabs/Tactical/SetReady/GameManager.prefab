@@ -88,6 +88,7 @@ MonoBehaviour:
   winScreen: {fileID: 3019183845595962977}
   loseScreen: {fileID: 978816417487356191}
   initialOffset: {fileID: 0}
+  initialOffsetPlaymode: {fileID: 0}
   cam: {fileID: 0}
   map: {fileID: 3723960988305491927}
   highlightTileParent: {fileID: 3723960988249923448}
@@ -110,6 +111,8 @@ MonoBehaviour:
   comfirmMovementSound: event:/Actions/confirm_mouvement
   passSound: event:/Actions/pass
   camBehavior: {fileID: 5403393136401232454}
+  alliesScoreText: {fileID: 0}
+  enemyScoreText: {fileID: 0}
 --- !u!114 &5403393136401232454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489,15 +492,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3488754681680587787, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3488754681680587787, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3488754681680587787, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3488754681680587787, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -523,6 +526,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FadeCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 3488754681680587791, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3488754683090413259, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -530,6 +537,14 @@ PrefabInstance:
     - target: {fileID: 3488754683090413259, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Fade
+      objectReference: {fileID: 0}
+    - target: {fileID: 3488754683090413260, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3488754683260175077, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03d2946904b54fa4090adf2dbb71d88a, type: 3}

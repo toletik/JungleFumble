@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     uint scoreEnemies = 0;
 
 
-    [SerializeField] public GameObject characterCard = null;
+    [SerializeField] GameObject characterCard = null;
     [SerializeField] GameObject ball = null;
     [SerializeField] Transform ballPlaymode = null;
     Vector3 ballinitialPos = Vector3.zero;
@@ -116,8 +116,8 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 ClearHighlightTiles();
+                characterCard.SetActive(false);
                 camBehavior.isInSwitch = true;
-                Debug.Log("INPUT");
                 camBehavior.Fade();
             }
 
