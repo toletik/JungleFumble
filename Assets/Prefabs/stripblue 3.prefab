@@ -194,7 +194,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 0c80ead0915bb45409347ba9b36ff212, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: b88a8ab62148892429ac5c8a71c6616c, type: 2}
+      objectReference: {fileID: 2100000, guid: ad06762b5a4b93f4991f52164490a60f, type: 2}
     - target: {fileID: 919132149155446097, guid: 0c80ead0915bb45409347ba9b36ff212, type: 3}
       propertyPath: m_Name
       value: strip3
