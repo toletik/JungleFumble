@@ -256,79 +256,78 @@ public class GameManager : MonoBehaviour
     }
     void ResolveCharacterColision()
     {
-        List<int> tempAllTilesIndex = new List<int>();
+        List<int> tempAllCurrentTilesIndex = new List<int>();
+        List<int> tempAllNextTilesIndex    = new List<int>();
 
         //Check if two character want to access same tile or a character want to move to a tile of a static character
         foreach (GameObject character in allCharacters)
         {
             Character currentCharacterScript = character.GetComponent<Character>();
-            int currentCharacterTile = 0;
-            bool currentCharacterIsStatic = false;
+            int currentCharacterCurrentTile = GetTile(character.transform.position.x, character.transform.position.y);
+            int currentCharacterNextTile = (currentCharacterScript.queueTileIndex.Count == 0)? GetTile(character.transform.position.x, character.transform.position.y) : currentCharacterScript.queueTileIndex[0];
 
-            //get reference tile
-            if (currentCharacterScript.queueTileIndex.Count == 0)
+
+            //they go to each other tiles
+            if (tempAllCurrentTilesIndex.Contains(currentCharacterNextTile) && tempAllNextTilesIndex[tempAllCurrentTilesIndex.IndexOf(currentCharacterNextTile)] == currentCharacterCurrentTile)
             {
-                currentCharacterIsStatic = true;
-                currentCharacterTile = GetTile(character.transform.position.x, character.transform.position.y);
+                ClearPath(character);
+                ClearPath(allCharacters[tempAllCurrentTilesIndex.IndexOf(currentCharacterNextTile)]);
+                ResolveTakeBall(currentCharacterScript, allCharacters[tempAllCurrentTilesIndex.IndexOf(currentCharacterNextTile)].GetComponent<Character>());
             }
-            else
-                currentCharacterTile = currentCharacterScript.queueTileIndex[0];
-
-
-            if (tempAllTilesIndex.Contains(currentCharacterTile))
+            //current try to go to other and other is static
+            else if (tempAllCurrentTilesIndex.Contains(currentCharacterNextTile) && tempAllNextTilesIndex[tempAllCurrentTilesIndex.IndexOf(currentCharacterNextTile)] == currentCharacterNextTile)
             {
-                Character otherCharacterScript = allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)].GetComponent<Character>();
+                ClearPath(character);
+                RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
+                ResolveTakeBall(currentCharacterScript, allCharacters[tempAllCurrentTilesIndex.IndexOf(currentCharacterNextTile)].GetComponent<Character>());
+            }
+            //current is static and other try to go to current
+            else if (tempAllNextTilesIndex.Contains(currentCharacterCurrentTile) && currentCharacterCurrentTile == currentCharacterNextTile)
+            {
+                ClearPath(allCharacters[tempAllNextTilesIndex.IndexOf(currentCharacterCurrentTile)]);
+                RuntimeManager.PlayOneShot(allCharacters[tempAllNextTilesIndex.IndexOf(currentCharacterCurrentTile)].GetComponent<Character>().blocSound);
+                ResolveTakeBall(currentCharacterScript, allCharacters[tempAllNextTilesIndex.IndexOf(currentCharacterCurrentTile)].GetComponent<Character>());
+            }
+            //current and other try to go to same tile
+            else if(tempAllNextTilesIndex.Contains(currentCharacterNextTile) )
+            {
+                GameObject otherCharacter = allCharacters[tempAllNextTilesIndex.IndexOf(currentCharacterNextTile)];
+                Character otherCharacterScript = otherCharacter.GetComponent<Character>();
 
-                //resolve colision
+                //if current is stronger he get the tile
+                if (currentCharacterScript.strength > otherCharacterScript.strength) 
                 {
-                    //current is static so other stop path
-                    if (currentCharacterIsStatic) 
-                    {
-                        ClearPath(allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)]);
-                        RuntimeManager.PlayOneShot(otherCharacterScript.blocSound);
-                    }
-                    //other is static so current stop path
-                    else if (otherCharacterScript.queueTileIndex.Count == 0)
-                    {
-                        ClearPath(character);
-                        RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
-                    }
-                    //if current is stronger he get the tile
-                    else if (currentCharacterScript.strength > otherCharacterScript.strength) 
-                    {
-                        ClearPathAfterFirst(currentCharacterScript);
-                        ClearPath(allCharacters[tempAllTilesIndex.IndexOf(currentCharacterTile)]);
-                        RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
-                    }
-                    //if other is stronger he get the tile
-                    else // other
-                    {
-                        ClearPathAfterFirst(otherCharacterScript);
-                        ClearPath(character);
-                        RuntimeManager.PlayOneShot(otherCharacterScript.blocSound);
-                    }
+                    ClearPathAfterFirst(currentCharacterScript);
+                    ClearPath(otherCharacter);
+                    RuntimeManager.PlayOneShot(currentCharacterScript.blocSound);
+                }
+                //if other is stronger he get the tile
+                else
+                {
+                    ClearPathAfterFirst(otherCharacterScript);
+                    ClearPath(character);
+                    RuntimeManager.PlayOneShot(otherCharacterScript.blocSound);
                 }
 
-                //resolve ball
-                if (currentCharacterScript.hasBall || otherCharacterScript.hasBall)
-                {
-                    bool isCurrentStronger = false;
-
-                    if (currentCharacterScript.strength > otherCharacterScript.strength)
-                        isCurrentStronger = true;
-                    else
-                        isCurrentStronger = false;
-
-                    currentCharacterScript.hasBall = isCurrentStronger;
-                    currentCharacterScript.ballIcon.SetActive(isCurrentStronger);
-                    otherCharacterScript.hasBall = !isCurrentStronger;
-                    otherCharacterScript.ballIcon.SetActive(!isCurrentStronger);
-                }
-                
+                ResolveTakeBall(currentCharacterScript, otherCharacterScript);
             }
 
-            tempAllTilesIndex.Add(currentCharacterTile);
+                 
+            tempAllCurrentTilesIndex.Add(currentCharacterCurrentTile);
+            tempAllNextTilesIndex.Add(currentCharacterNextTile);
 
+        }
+    }
+    void ResolveTakeBall(Character currentCharacterScript, Character otherCharacterScript)
+    {
+        if (currentCharacterScript.hasBall || otherCharacterScript.hasBall)
+        {
+            bool isCurrentStronger = (currentCharacterScript.strength > otherCharacterScript.strength) ? true : false;
+
+            currentCharacterScript.hasBall = isCurrentStronger;
+            currentCharacterScript.ballIcon.SetActive(isCurrentStronger);
+            otherCharacterScript.hasBall = !isCurrentStronger;
+            otherCharacterScript.ballIcon.SetActive(!isCurrentStronger);
         }
     }
     void MoveCharacters()
