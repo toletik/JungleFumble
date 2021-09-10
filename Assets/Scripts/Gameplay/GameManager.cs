@@ -67,13 +67,8 @@ public class GameManager : MonoBehaviour
             allCharacters.Add(character);
         foreach (GameObject character in enemies)
             allCharacters.Add(character);
-        
-        //Set position of all CharacterPlaymode
-        foreach (GameObject character in allCharacters)
-        {
-            Character characterScript = character.GetComponent<Character>();
-            characterScript.charactePlaymode.position = new Vector3(character.transform.localPosition.x + initialOffsetPlaymode.position.x, characterScript.charactePlaymode.position.y, character.transform.localPosition.y + initialOffsetPlaymode.position.z);
-        }
+
+        ResetPositionCharacterPlaymode();
 
         ballinitialPos = ball.transform.position;
         ballDestination = ball.transform.position;
@@ -138,7 +133,14 @@ public class GameManager : MonoBehaviour
 
 
 
-
+    void ResetPositionCharacterPlaymode()
+    {
+        foreach (GameObject character in allCharacters)
+        {
+            Character characterScript = character.GetComponent<Character>();
+            characterScript.charactePlaymode.position = new Vector3(character.transform.localPosition.x + initialOffsetPlaymode.position.x, characterScript.charactePlaymode.position.y, character.transform.localPosition.y + initialOffsetPlaymode.position.z);
+        }
+    }
     //Playmode
     public void StartPlayMode()
     {
@@ -724,7 +726,6 @@ public class GameManager : MonoBehaviour
 		{
             scoreAllies++;
             alliesScoreText.GetComponent<TextMesh>().text = scoreAllies.ToString();
-
         }   
         else
 		{
@@ -755,6 +756,7 @@ public class GameManager : MonoBehaviour
                 charaScript.queueTileIndex.Clear();
                 chara.transform.position = charaScript.initialPos;
             }
+            ResetPositionCharacterPlaymode();
 
             ball.transform.position = ballinitialPos + new Vector3(character.CompareTag("Allies")? 1 : -1, 0, 0);
             ballDestination = ball.transform.position;
