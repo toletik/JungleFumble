@@ -730,6 +730,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlaySoundAtStart
       objectReference: {fileID: 0}
+    - target: {fileID: 169392442899110629, guid: c1187be02058d1d418177e7b5c4290d6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1187be02058d1d418177e7b5c4290d6, type: 3}
 --- !u!4 &1990208426 stripped
