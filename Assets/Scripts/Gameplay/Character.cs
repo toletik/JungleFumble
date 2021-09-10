@@ -18,6 +18,8 @@ public class Character : MonoBehaviour
     public bool canPickUpBall = true;
 
     [SerializeField] public Material characterCardMat = null;
+    [SerializeField] public GameObject onCatch = null;
+    [SerializeField] public GameObject onLaunch = null;
 
 
     public Vector3 initialPos;
@@ -50,6 +52,9 @@ public class Character : MonoBehaviour
             other.gameObject.SetActive(false);
             other.gameObject.GetComponent<Ball>().ballPlaymode.gameObject.SetActive(false);
             RuntimeManager.PlayOneShot(catchSound);
+
+            if(onCatch != null)
+                onCatch.SetActive(true);
         }
     }
 
