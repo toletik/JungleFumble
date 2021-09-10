@@ -134,7 +134,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-
+    //Playmode
     void ResetPositionCharacterPlaymode()
     {
         foreach (GameObject character in allCharacters)
@@ -147,7 +147,6 @@ public class GameManager : MonoBehaviour
     {
         ballPlaymode.position = new Vector3(ball.transform.localPosition.x + initialOffsetPlaymode.position.x, ballPlaymode.position.y, ball.transform.localPosition.y + initialOffsetPlaymode.position.z);
     }
-    //Playmode
     public void StartPlayMode()
     {
         inPlayMode = true;
